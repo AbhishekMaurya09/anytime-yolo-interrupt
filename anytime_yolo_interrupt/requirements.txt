@@ -1,0 +1,8 @@
+# The package list lives one folder up, next to .venv, so there is one list to maintain.
+# This line makes "pip install -r anytime_yolo_interrupt/requirements.txt" install the same thing.
+-r ../requirements.txt
+
+# Note: torch is only needed for models/, data/yolo_dataset.py's Dataset class,
+# inference/gelan_adapter.py, and the training / live / timing scripts. The
+# interrupt framework itself (ResultManager, InterruptManager, SensorInterface,
+# MockAnytimeAdapter, evaluation/metrics.py, visualization) works without it.

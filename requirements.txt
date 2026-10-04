@@ -1,0 +1,30 @@
+# Interrupt-Driven Anytime YOLO: Python packages.
+# Tested with Python 3.11. Install from this folder into a virtual environment:
+#
+#     python -m venv .venv
+#     .venv\Scripts\python -m pip install -r requirements.txt        (Windows)
+#     .venv/bin/python -m pip install -r requirements.txt            (Linux)
+#
+# The versions below are the ones this project was developed and tested with.
+
+# PyTorch with CUDA 12.4 support (needs an NVIDIA GPU and a recent driver).
+# Plain "pip install torch" on Windows gives a CPU-only build, hence this index.
+# For a machine without an NVIDIA GPU, replace cu124 with cpu on both lines.
+--extra-index-url https://download.pytorch.org/whl/cu124
+torch==2.6.0+cu124
+
+# Core
+numpy==2.4.6
+PyYAML==6.0.3              # reads data.yaml and the config file
+opencv-python==5.0.0.93    # image loading, resizing, augmentation
+                           # (on a server without a display, opencv-python-headless also works)
+pillow==12.3.0             # image sizes in the dataset builder
+
+# Plots and diagrams (visualization/, docs/make_*.py)
+matplotlib==3.11.2
+
+# Tests (tests/test_anytime.py)
+pytest==9.1.1
+
+# Export for Netron (scripts/export_onnx.py)
+onnx==1.23.0

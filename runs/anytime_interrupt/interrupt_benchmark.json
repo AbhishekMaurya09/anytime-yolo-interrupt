@@ -1,0 +1,26 @@
+[
+  {
+    "frame_id": 100,
+    "interrupt_time_ms": 5.0,
+    "latest_head_name": null,
+    "latest_head_latency_ms": null,
+    "num_detections": null,
+    "message": "NO DETECTION AVAILABLE YET"
+  },
+  {
+    "frame_id": 100,
+    "interrupt_time_ms": 15.0,
+    "latest_head_name": "early_head_2",
+    "latest_head_latency_ms": 11.372400011168793,
+    "num_detections": 4,
+    "message": "Returning early_head_2 detection immediately."
+  },
+  {
+    "frame_id": 100,
+    "interrupt_time_ms": 30.0,
+    "latest_head_name": "final",
+    "latest_head_latency_ms": 21.220400027232245,
+    "num_detections": 6,
+    "message": "Returning final detection immediately."
+  }
+]

@@ -1,0 +1,121 @@
+{
+    // Every config runs as a module from the workspace root, because the code
+    // imports itself as `anytime_yolo_interrupt.*`.
+    "version": "0.2.0",
+    "inputs": [
+        {
+            "id": "epochs",
+            "type": "promptString",
+            "description": "Number of epochs",
+            "default": "100"
+        },
+        {
+            "id": "runName",
+            "type": "promptString",
+            "description": "Run folder name under runs/anytime_interrupt/",
+            "default": "train7"
+        },
+        {
+            "id": "checkpoint",
+            "type": "promptString",
+            "description": "Checkpoint to load",
+            "default": "runs/anytime_interrupt/train6_bdd70k/last.pt"
+        },
+        {
+            "id": "interruptMs",
+            "type": "promptString",
+            "description": "Auto-interrupt after N ms",
+            "default": "60"
+        }
+    ],
+    "configurations": [
+        {
+            "name": "Train (GPU)",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "anytime_yolo_interrupt.scripts.train",
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "--data-root", "C:\\Users\\abhis\\Downloads\\archive (2)",
+                "--data-yaml", "C:\\Users\\abhis\\Downloads\\archive (2)\\data.yaml",
+                "--epochs", "${input:epochs}",
+                "--batch-size", "4",
+                "--img-size", "640",
+                "--device", "cuda",
+                "--val-every", "5",
+                "--log-dir", "runs/anytime_interrupt/${input:runName}"
+            ]
+        },
+        {
+            "name": "Live interrupt (press Enter)",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "anytime_yolo_interrupt.scripts.interrupt_inference_live",
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "args": [
+                "--checkpoint", "${input:checkpoint}",
+                "--data-root", "C:\\Users\\abhis\\Downloads\\archive (2)",
+                "--data-yaml", "C:\\Users\\abhis\\Downloads\\archive (2)\\data.yaml",
+                "--split", "test",
+                "--device", "cuda",
+                "--log-dir", "runs/anytime_interrupt/live"
+            ]
+        },
+        {
+            "name": "Live interrupt (auto, fixed ms)",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "anytime_yolo_interrupt.scripts.interrupt_inference_live",
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "args": [
+                "--checkpoint", "${input:checkpoint}",
+                "--data-root", "C:\\Users\\abhis\\Downloads\\archive (2)",
+                "--data-yaml", "C:\\Users\\abhis\\Downloads\\archive (2)\\data.yaml",
+                "--split", "test",
+                "--device", "cuda",
+                "--auto-interrupt-after-ms", "${input:interruptMs}",
+                "--log-dir", "runs/anytime_interrupt/auto_${input:interruptMs}"
+            ]
+        },
+        {
+            "name": "Demo: software interrupt (mock model)",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "anytime_yolo_interrupt.scripts.demo_interrupt",
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "args": ["--interrupt-after", "18"]
+        },
+        {
+            "name": "Demo: sensor interrupt (mock model)",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "anytime_yolo_interrupt.scripts.demo_interrupt",
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "args": ["--mode", "sensor", "--sensor-value", "4.2", "--threshold", "5.0"]
+        },
+        {
+            "name": "Benchmark: interrupt-time sweep (mock model)",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "anytime_yolo_interrupt.scripts.benchmark_anytime",
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "args": ["--interrupt-times", "5", "10", "15", "20", "25", "30"]
+        },
+        {
+            "name": "Python: current file",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "cwd": "${workspaceFolder}",
+            "env": { "PYTHONPATH": "${workspaceFolder}" },
+            "console": "integratedTerminal"
+        }
+    ]
+}

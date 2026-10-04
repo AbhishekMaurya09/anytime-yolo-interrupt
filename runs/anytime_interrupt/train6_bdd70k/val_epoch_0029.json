@@ -1,0 +1,38 @@
+{
+  "early_head_1": {
+    "precision": 0.6074925927785868,
+    "recall": 0.4344250520721109,
+    "mAP50": 0.2076118335713682,
+    "mAP50_95": 0.09715197483425034,
+    "n_images_processed": 1500,
+    "n_images_expected": 1500,
+    "is_partial": false
+  },
+  "early_head_2": {
+    "precision": 0.6796308503625577,
+    "recall": 0.518350930115636,
+    "mAP50": 0.3018294516908423,
+    "mAP50_95": 0.1428574332943113,
+    "n_images_processed": 1500,
+    "n_images_expected": 1500,
+    "is_partial": false
+  },
+  "early_head_3": {
+    "precision": 0.6865915782586344,
+    "recall": 0.5275802628743805,
+    "mAP50": 0.3175865727075903,
+    "mAP50_95": 0.15596482733136097,
+    "n_images_processed": 1500,
+    "n_images_expected": 1500,
+    "is_partial": false
+  },
+  "final": {
+    "precision": 0.6945861213794394,
+    "recall": 0.533074768368886,
+    "mAP50": 0.32345596700713053,
+    "mAP50_95": 0.15924098862627994,
+    "n_images_processed": 1500,
+    "n_images_expected": 1500,
+    "is_partial": false
+  }
+}

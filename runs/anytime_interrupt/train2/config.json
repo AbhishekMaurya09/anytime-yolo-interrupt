@@ -1,0 +1,39 @@
+{
+  "args": {
+    "data_root": "C:\\Users\\abhis\\Downloads\\archive (2)",
+    "data_yaml": "C:\\Users\\abhis\\Downloads\\archive (2)\\data.yaml",
+    "train_split": "train",
+    "val_split": "calibration",
+    "img_size": 640,
+    "batch_size": 4,
+    "epochs": 100,
+    "lr": 0.001,
+    "device": "cuda",
+    "no_amp": false,
+    "val_every": 5,
+    "log_dir": "runs/anytime_interrupt/train2",
+    "resume": null,
+    "lambda_head1": 0.3,
+    "lambda_head2": 0.5,
+    "lambda_head3": 0.7,
+    "lambda_final": 1.0
+  },
+  "head_weights": {
+    "early_head_1": 0.3,
+    "early_head_2": 0.5,
+    "early_head_3": 0.7,
+    "final": 1.0
+  },
+  "class_names": [
+    "pedestrian",
+    "rider",
+    "car",
+    "truck",
+    "bus",
+    "train",
+    "motorcycle",
+    "bicycle",
+    "traffic light",
+    "traffic sign"
+  ]
+}

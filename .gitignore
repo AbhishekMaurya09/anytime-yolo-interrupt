@@ -1,0 +1,22 @@
+# Python environment and caches
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Private notes: cluster machine, account and clean-up details
+PRIVATE_NOTES.md
+
+# Trained models (about 42 MB each) stay local
+*.pt
+*.onnx
+
+# Cluster job log (names the cluster's machines)
+runs/**/slurm_job_*.log
+
+# Scratch outputs from demos and smoke tests
+runs/anytime_interrupt/smoke/
+runs/anytime_interrupt/live*/
+runs/anytime_interrupt/auto_*/
+runs/anytime_interrupt/frames/
+runs/anytime_interrupt/latest_result.json
