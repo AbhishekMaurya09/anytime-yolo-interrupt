@@ -33,8 +33,13 @@ class GelanAnytimeAdapter(AnytimeModelAdapter):
         img_size: int = 640,
         conf_thres: float = 0.3,
         iou_thres: float = 0.5,
+        half: bool = False,
     ):
+        """half=True runs the network in 16-bit floats (GPU only). The raw
+        head outputs are converted back to 32-bit before decoding, because
+        box coordinates up to 640 px lose sub-pixel precision in 16 bits."""
         self.device = torch.device(device if torch.cuda.is_available() or device == "cpu" else "cpu")
+        self.half = half and self.device.type == "cuda"
         self.class_names = class_names
         self.img_size = img_size
         self.conf_thres = conf_thres
@@ -45,6 +50,8 @@ class GelanAnytimeAdapter(AnytimeModelAdapter):
         self.model = build_model(len(class_names)).to(self.device)
         self.model.load_state_dict(ckpt["model"])
         self.model.eval()
+        if self.half:
+            self.model.half()
 
         self.heads = [
             HeadSpec(1, "early_head_1"),
@@ -61,6 +68,8 @@ class GelanAnytimeAdapter(AnytimeModelAdapter):
         image = frame["image"]
         canvas, info = letterbox(image, self.img_size)
         img_tensor = torch.from_numpy(canvas.astype(np.float32) / 255.0).permute(2, 0, 1).unsqueeze(0).to(self.device)
+        if self.half:
+            img_tensor = img_tensor.half()
 
         with torch.no_grad():
             p3_bb, p4_bb, p5_bb = self.model.forward_backbone(img_tensor)
@@ -110,6 +119,8 @@ class GelanAnytimeAdapter(AnytimeModelAdapter):
             else:
                 raise ValueError(f"Unknown head_index {head_index}")
 
+        if self.half:
+            raw = [tuple(t.float() for t in scale) for scale in raw]
         return raw  # list of (cls_logits, obj_logit, reg_raw) per scale
 
     def postprocess(self, raw_pred, head_index: int, orig_width: int, orig_height: int):

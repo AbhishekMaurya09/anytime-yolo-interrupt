@@ -92,6 +92,8 @@ Train (augmentation is on by default):
 | `benchmark_latency` | Time from image in to each head's answer, through the real pipeline |
 | `profile_heads` | Time every step separately: resize, backbone, each head, each post-processing |
 | `export_onnx` | Export a checkpoint to ONNX (needed to view the network in Netron) |
+| `quantize_compare` | Compare FP32, FP16 (GPU) and INT8 (CPU): per-head accuracy, time to each head, and model size |
+| `profile_fp16_layers` | Time every layer on the GPU in FP32 and FP16, to show where FP16 loses time |
 | `build_bdd_subset` | Build a train / calibration / test dataset from the full BDD100K download |
 | `show_augmentations` | Save a grid of augmented training images with their boxes drawn |
 | `demo_interrupt`, `detect`, `benchmark_anytime` | Demos and an interrupt-time sweep using the **mock** model (no trained weights or GPU needed) |
@@ -173,6 +175,8 @@ at confidence ≥ 0.001.
 | train5 | 1,200 images | 10× more data | 0.122 |
 | train6 | 65,000 images | 54× more data | 0.355 |
 
+![mAP50 of each training run on the same 40 test images](docs/results/accuracy_by_run.png)
+
 On its own 1,500-image test set, train6 scores **0.299** (0.332 without
 the "train" class, which has 3 test boxes). That is the most reliable
 figure; 40 images is a noisy sample.
@@ -186,6 +190,12 @@ figure; 40 images is a noisy sample.
 | Head 3 | 0.299 | 0.152 | 0.690 | 52.6% |
 | Final | 0.299 | 0.152 | 0.695 | 52.8% |
 
+![mAP50 and mAP50-95 of each head](docs/results/per_head_accuracy.png)
+
+Accuracy by class follows the amount of training data:
+
+![AP50 of each class, with the number of training boxes](docs/results/per_class_accuracy.png)
+
 ### Time vs accuracy (train6, GTX 1650, 150 unseen images)
 
 | Head | Answer ready at (median) | mAP50 |
@@ -194,6 +204,8 @@ figure; 40 images is a noisy sample.
 | Head 2 | 29.8 ms | 0.322 |
 | Head 3 | 38.3 ms | 0.347 |
 | Final | 44.6 ms | 0.365 |
+
+![Time vs accuracy for each head](docs/time_vs_accuracy.png)
 
 These times are for frames that arrive in a steady stream, processed on
 one long-lived worker thread. Three things make an answer arrive later:
@@ -213,7 +225,26 @@ In the live demo with a fixed 50 ms interrupt, 60 of 150 frames had the
 Final answer, 66 had Head 2, and 8 had nothing yet: the pauses between
 its frames trigger the idle-gap effect on some of them.
 
-Per-class results, the full run history and how each number was measured
+### FP16 and INT8 (train6, no retraining, 150 unseen images)
+
+| Version | Final-head mAP50 | Model size | Final head ready at |
+|---|---|---|---|
+| FP32 | 0.365 | 21.8 MB | 49.6 ms on the GPU, 113.4 ms on the CPU |
+| FP16 | 0.365 | 10.9 MB | 71.6 ms on the GPU |
+| INT8 | 0.347 | 6.2 MB | 67.3 ms on the CPU |
+
+GPU times are the whole pipeline; CPU times are the network only.
+
+![mAP50 of each head in FP32, FP16 and INT8](docs/results/quantization_accuracy.png)
+
+![Time until each head's output in FP32, FP16 and INT8](docs/results/quantization_latency.png)
+
+### Where the computation goes
+
+![Multiply-adds per image for each stage of the network](docs/results/workload_by_stage.png)
+
+More charts (learning curves, the post-processing speed-up) are in
+`docs/results/`. The full run history and how each number was measured
 are in [PROJECT_EXPLAINED.md](PROJECT_EXPLAINED.md), section 8.
 
 ## Datasets
@@ -237,6 +268,7 @@ traffic light, traffic sign, train.
 | `docs/model_architecture.png` (.svg, .pdf) | Full network diagram |
 | `docs/head_architecture.png` (.svg, .pdf) | One detection head, with timelines |
 | `docs/time_vs_accuracy.png` (.svg, .pdf) | Time vs accuracy chart |
+| `docs/results/` | Nine result charts (.png, .svg); redraw them with `docs/make_result_charts.py` |
 | `docs/accelerator_workload.csv` and `_summary.md` | Per-layer workload for accelerator design |
 | `cluster/` | SLURM job script and notes for the cluster run |
 | `backup_original/` | Files as they were before each fix |

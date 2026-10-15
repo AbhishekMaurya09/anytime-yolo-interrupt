@@ -90,7 +90,7 @@ images**, so every test set is unseen by every model.
 |---|---|---|---|---|---|
 | old200 | 120 | 40 | 40 | `C:\Users\abhis\Downloads\archive (2)` | train1–train4 |
 | bdd1500 | 1,200 | 150 | 150 | `C:\Users\abhis\Downloads\bdd1500` | train5 |
-| bdd70k | 65,000 | 1,500 | 1,500 | on the cluster only (see §8.7) | train6 |
+| bdd70k | 65,000 | 1,500 | 1,500 | on the cluster only (see §8.8) | train6 |
 
 The full BDD100K download (70,000 training images plus the detection
 label file) is at `C:\Users\abhis\Downloads\archive (3)`.
@@ -308,6 +308,8 @@ Final list, e.g.:  [car, 0.87, (412, 300, 590, 410)], [person, 0.62, ...]
 > **2.9 ms per head**. The detections are identical (320 cases, 17,990
 > boxes compared). The old version is in
 > `backup_original/postprocess_loop_version.py`.
+
+![Time until each head's answer is ready, before and after the post-processing rewrite](docs/results/postprocess_speedup.png)
 
 ### 4.6 Size and depth
 
@@ -588,6 +590,14 @@ The most reliable figure is train6's **0.299** on 1,500 unseen images
 (mAP50-95 0.152). The 40-image test is the only set every run can be
 compared on, but scores on 40 images jump around.
 
+![mAP50 of train2, train4, train5 and train6 on the same 40 test images](docs/results/accuracy_by_run.png)
+
+The next chart shows validation accuracy during the three 120-image runs.
+Without augmentation the score stops rising after about epoch 80; with
+augmentation it is still rising at the end.
+
+![Validation mAP50 over 100 epochs for train2, train3 and train4](docs/results/learning_curves_small_data.png)
+
 `runs/anytime_interrupt/train6_bdd70k/last.pt` is the best model, and the
 VS Code run configs use it by default.
 
@@ -612,6 +622,13 @@ VS Code run configs use it by default.
 Each later head is better or equal, on images the model never saw. The
 biggest step is from Head 1 to Head 2 (adding the FPN).
 
+![mAP50 and mAP50-95 of each head on 1,500 test images](docs/results/per_head_accuracy.png)
+
+During training the four heads improved together and kept the same order
+(validation images, measured every 2 epochs):
+
+![Validation mAP50 of the four heads over the 30 epochs of train6](docs/results/learning_curves_train6_heads.png)
+
 ### 8.4 Each class (train6, final head, same test set)
 
 | Class | AP50 | Training boxes |
@@ -631,6 +648,8 @@ Accuracy follows the amount of training data. The average of 0.299 is
 pulled down by the rare classes; without "train" (only 3 test boxes) it
 is 0.332.
 
+![AP50 of each class, with the number of training boxes](docs/results/per_class_accuracy.png)
+
 ### 8.5 Time vs accuracy (train6, GTX 1650, 150 unseen test images)
 
 | Head | Answer ready at | 90% of frames by | mAP50 | Share of final accuracy |
@@ -641,9 +660,89 @@ is 0.332.
 | Final | 44.6 ms | 49.0 ms | 0.365 | 100% |
 
 Head 2 is the best value: 88% of the final accuracy in two thirds of the
-time. The chart is `docs/time_vs_accuracy.png`.
+time.
 
-### 8.6 Checks that pass
+![Time vs accuracy for each head](docs/time_vs_accuracy.png)
+
+### 8.6 Smaller number formats: FP16 and INT8 (measured 2026-10-06)
+
+The model was trained with 32-bit floating-point numbers (FP32). Two
+smaller formats were tried on the trained `train6` model, without any
+retraining (script: `scripts/quantize_compare.py`):
+
+- **FP16**: 16-bit floats. Run on the GPU in PyTorch.
+- **INT8**: 8-bit integers, the format an accelerator would use. The model
+  was converted with ONNX Runtime, using 100 images from the calibration
+  split to learn the range of each layer's values. Run on the CPU, because
+  INT8 on this GPU would need TensorRT, which is not installed.
+
+**Accuracy** (mAP50 / mAP50-95, same 150 test images as §8.5):
+
+| Version | Head 1 | Head 2 | Head 3 | Final |
+|---|---|---|---|---|
+| FP32 | 0.250 / 0.120 | 0.322 / 0.161 | 0.347 / 0.187 | 0.365 / 0.199 |
+| FP16 | 0.251 / 0.121 | 0.322 / 0.161 | 0.347 / 0.187 | 0.365 / 0.199 |
+| INT8 | 0.236 / 0.113 | 0.308 / 0.146 | 0.326 / 0.164 | 0.347 / 0.173 |
+
+![mAP50 of each head in FP32, FP16 and INT8](docs/results/quantization_accuracy.png)
+
+- **FP16 loses nothing.**
+- **INT8 loses about 5% of mAP50** (0.365 → 0.347 at the Final head) and
+  about 13% of the stricter mAP50-95, so boxes get slightly less exact.
+  The four heads keep their order.
+- The loss is spread through the network, not in the output layers:
+  keeping the 36 final output convolutions in floating point gave 0.349,
+  almost no better.
+- Most of the loss is quantisation itself: a simulation that rounds to
+  8 bits but does the arithmetic in floats gives 0.352.
+
+**Size:** FP32 21.8 MB, FP16 10.9 MB, INT8 6.2 MB.
+
+**Time until each head's output** (median, laptop on mains power):
+
+| Version | Head 1 | Head 2 | Head 3 | Final |
+|---|---|---|---|---|
+| GPU, FP32 (full pipeline) | 22.5 ms | 33.2 | 42.6 | 49.6 |
+| GPU, FP16 (full pipeline) | 29.3 ms | 44.9 | 59.7 | 71.6 |
+| CPU, FP32 (network only) | 41.9 ms | 64.4 | 90.3 | 113.4 |
+| CPU, INT8 (network only) | 28.3 ms | 41.8 | 55.3 | 67.3 |
+
+![Time until each head's output: GPU FP32 vs FP16, and CPU FP32 vs INT8](docs/results/quantization_latency.png)
+
+- **FP16 is slower than FP32 on this GPU**, by 1.3× to 1.4×. The GTX 1650
+  has no fast 16-bit arithmetic, so FP16 only saves memory here.
+  A layer-by-layer timing (`scripts/profile_fp16_layers.py`, network
+  only) shows the loss is in the convolutions:
+
+  | Layer type | Layers | FP32 | FP16 | FP16 ÷ FP32 |
+  |---|---|---|---|---|
+  | Conv 3 × 3 | 68 | 9.8 ms | 38.2 ms | 3.9× |
+  | Conv 1 × 1 | 76 | 6.5 ms | 13.4 ms | 2.1× |
+  | Conv 3 × 3, stride 2 | 7 | 1.2 ms | 3.1 ms | 2.6× |
+  | BatchNorm | 115 | 8.9 ms | 11.3 ms | 1.3× |
+  | SiLU, max-pool, upsample | 120 | 4.4 ms | 4.2 ms | 0.9× |
+
+  The whole network alone takes 21.5 ms in FP32 and 48.5 ms in FP16. The
+  worst layers are the 3 × 3 convolutions of the heads on the 80 × 80
+  grid: 0.2 ms each in FP32, 1.0 ms in FP16. Letting cuDNN search for its
+  fastest algorithm (`cudnn.benchmark`) did not change the FP16 time.
+- **INT8 is faster than FP32 on the CPU**, by 1.5× to 1.7×.
+- The GPU rows are the whole pipeline (resize, network, post-processing).
+  The CPU rows are the network alone, with head k timed on a graph cut to
+  heads 1 to k; they are the median of three interleaved repeats, and
+  single repeats varied by about ±15%.
+- The GPU FP32 row is about 10% slower than §8.5 (49.6 vs 44.6 ms at the
+  Final head). It was measured on 60 images in a different session.
+- **On battery everything is slower and unstable**: the same script gave
+  60.8 ms (FP32) and 98.0 ms (FP16) at the Final head. Always time on
+  mains power; the script prints a warning when it detects battery.
+
+What this means for an accelerator: 8-bit weights and activations are
+usable as they are, at a cost of about 5% mAP50. Recovering that loss
+would need a better calibration method or quantisation-aware training;
+neither has been tried.
+
+### 8.7 Checks that pass
 
 - **21 of 21 unit tests** (`tests/test_anytime.py`), including 8 threads
   reading the mailbox while a frame is processed.
@@ -652,7 +751,7 @@ time. The chart is `docs/time_vs_accuracy.png`.
 - A stopped-and-resumed run follows the same learning-rate schedule as an
   uninterrupted one.
 
-### 8.7 Where train6 ran
+### 8.8 Where train6 ran
 
 `train6` was trained as a SLURM job on a university GPU cluster, on one
 GTX 1080 Ti, for about 13 hours, starting from train5's weights. Its model
@@ -688,6 +787,9 @@ anytime_yolo_interrupt (1)/          ← open THIS folder in VS Code
 │   ├── head_architecture.png/.svg/.pdf     one head, with timelines
 │   ├── time_vs_accuracy.png/.svg/.pdf      the chart in §8.5
 │   ├── make_*.py                    scripts that redraw those pictures
+│   ├── results/                     the result charts in §4.5, §8 and §11 (.png and .svg)
+│   │   └── measured_results.json    numbers the charts use that are not stored under runs/
+│   ├── make_result_charts.py        redraws every chart in results/
 │   ├── slides_zoom/                 cropped pieces of the network picture
 │   ├── accelerator_workload.csv     per-layer table for accelerator design (§11)
 │   └── accelerator_workload_summary.md   totals by stage, memory, weight ranges
@@ -715,6 +817,7 @@ anytime_yolo_interrupt (1)/          ← open THIS folder in VS Code
     │   ├── benchmark_latency.py         when is each head's answer ready?
     │   ├── profile_heads.py             time every step separately
     │   ├── export_onnx.py               export for Netron
+    │   ├── quantize_compare.py          FP32 vs FP16 vs INT8: accuracy, time, size
     │   ├── demo_interrupt.py            demo with the fake model
     │   ├── detect.py                    4 modes: normal/progressive/interrupt/sensor
     │   └── benchmark_anytime.py         interrupt-time sweep with the fake model
@@ -751,7 +854,7 @@ share it from the page's Share menu.
    train1–train4 use the wrong name order (§3.2), and those checkpoints
    still store the old name list inside `last.pt`. The files themselves
    are now fixed.
-9. **train6 was trained on a cluster GPU, not on the laptop** (§8.7). Say where a
+9. **train6 was trained on a cluster GPU, not on the laptop** (§8.8). Say where a
    result was trained when you present it.
 
 ---
@@ -782,6 +885,8 @@ Work needed before each answer, in multiply-adds:
 The right column is the case for running heads in parallel with the next
 stage on separate hardware: the Final answer would need 3.73 G of work on
 its own path instead of waiting behind all 8.89 G.
+
+![Multiply-adds per image for each stage of the network](docs/results/workload_by_stage.png)
 
 The full per-layer table is `docs/accelerator_workload.csv` (one row per
 convolution, in execution order, with shapes, multiply-adds, memory sizes

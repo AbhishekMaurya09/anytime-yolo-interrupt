@@ -28,3 +28,6 @@ pytest==9.1.1
 
 # Export for Netron (scripts/export_onnx.py)
 onnx==1.23.0
+
+# 8-bit quantisation and CPU inference (scripts/quantize_compare.py)
+onnxruntime==1.30.0

@@ -1,0 +1,5114 @@
+{
+  "checkpoint": "runs/anytime_interrupt/train6_bdd70k/last.pt",
+  "gpu": "NVIDIA GeForce GTX 1650",
+  "reps": 50,
+  "on_battery": false,
+  "empty_call_ms": 0.005199981387704611,
+  "whole_network": {
+    "fp32_ms": 21.537299995543435,
+    "fp16_ms": 48.458100005518645
+  },
+  "whole_network_cudnn_benchmark": {
+    "fp32_ms": 23.09765000245534,
+    "fp16_ms": 48.43769999570213
+  },
+  "by_kind": {
+    "conv 3x3": {
+      "layers": 68,
+      "fp32_ms": 9.785950183868408,
+      "fp16_ms": 38.210650061955675
+    },
+    "conv 1x1": {
+      "layers": 76,
+      "fp32_ms": 6.465599813964218,
+      "fp16_ms": 13.424600008875132
+    },
+    "batchnorm": {
+      "layers": 115,
+      "fp32_ms": 8.888999931514263,
+      "fp16_ms": 11.331749730743468
+    },
+    "conv 3x3 stride 2": {
+      "layers": 7,
+      "fp32_ms": 1.2119499442633241,
+      "fp16_ms": 3.1117500620894134
+    },
+    "maxpool": {
+      "layers": 3,
+      "fp32_ms": 0.1286999904550612,
+      "fp16_ms": 0.12980002793483436
+    },
+    "upsample": {
+      "layers": 2,
+      "fp32_ms": 0.09989994578063488,
+      "fp16_ms": 0.08625001646578312
+    },
+    "silu": {
+      "layers": 115,
+      "fp32_ms": 4.209550126688555,
+      "fp16_ms": 3.935899934731424
+    }
+  },
+  "by_stage": {
+    "backbone": {
+      "layers": 84,
+      "fp32_ms": 6.397949677193537,
+      "fp16_ms": 12.153300107456744
+    },
+    "head1": {
+      "layers": 45,
+      "fp32_ms": 4.097099823411554,
+      "fp16_ms": 10.44400007231161
+    },
+    "fpn": {
+      "layers": 38,
+      "fp32_ms": 2.542650036048144,
+      "fp16_ms": 5.717099964385852
+    },
+    "head2": {
+      "layers": 45,
+      "fp32_ms": 4.091450042324141,
+      "fp16_ms": 10.402799904113635
+    },
+    "pan": {
+      "layers": 48,
+      "fp32_ms": 3.1084000947885215,
+      "fp16_ms": 6.280849891481921
+    },
+    "head3": {
+      "layers": 45,
+      "fp32_ms": 4.048050002893433,
+      "fp16_ms": 10.334949882235378
+    },
+    "refine": {
+      "layers": 36,
+      "fp32_ms": 2.2625999699812382,
+      "fp16_ms": 4.207400139421225
+    },
+    "head_final": {
+      "layers": 45,
+      "fp32_ms": 4.242450289893895,
+      "fp16_ms": 10.690299881389365
+    }
+  },
+  "layers": [
+    {
+      "layer": "stem.0.conv",
+      "kind": "conv 3x3 stride 2",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        3,
+        640,
+        640
+      ],
+      "fp32_ms": 0.20544999279081821,
+      "fp16_ms": 0.19810002413578331
+    },
+    {
+      "layer": "stem.0.bn",
+      "kind": "batchnorm",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        16,
+        320,
+        320
+      ],
+      "fp32_ms": 0.16820000018924475,
+      "fp16_ms": 0.18430000636726618
+    },
+    {
+      "layer": "stem.0.act",
+      "kind": "silu",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        16,
+        320,
+        320
+      ],
+      "fp32_ms": 0.09444999159313738,
+      "fp16_ms": 0.08384999819099903
+    },
+    {
+      "layer": "stem.1.conv",
+      "kind": "conv 3x3 stride 2",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        16,
+        320,
+        320
+      ],
+      "fp32_ms": 0.2196999848820269,
+      "fp16_ms": 0.8949500042945147
+    },
+    {
+      "layer": "stem.1.bn",
+      "kind": "batchnorm",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        32,
+        160,
+        160
+      ],
+      "fp32_ms": 0.11124997399747372,
+      "fp16_ms": 0.12105001951567829
+    },
+    {
+      "layer": "stem.1.act",
+      "kind": "silu",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        32,
+        160,
+        160
+      ],
+      "fp32_ms": 0.05849997978657484,
+      "fp16_ms": 0.05400000372901559
+    },
+    {
+      "layer": "stem.2.cv1.conv",
+      "kind": "conv 1x1",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        32,
+        160,
+        160
+      ],
+      "fp32_ms": 0.10179996024817228,
+      "fp16_ms": 0.10140001541003585
+    },
+    {
+      "layer": "stem.2.cv1.bn",
+      "kind": "batchnorm",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        16,
+        160,
+        160
+      ],
+      "fp32_ms": 0.08624998736195266,
+      "fp16_ms": 0.11320001794956625
+    },
+    {
+      "layer": "stem.2.cv1.act",
+      "kind": "silu",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        16,
+        160,
+        160
+      ],
+      "fp32_ms": 0.04295003600418568,
+      "fp16_ms": 0.03789999755099416
+    },
+    {
+      "layer": "stem.2.cv2.conv",
+      "kind": "conv 1x1",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        32,
+        160,
+        160
+      ],
+      "fp32_ms": 0.09835002128966153,
+      "fp16_ms": 0.09854999370872974
+    },
+    {
+      "layer": "stem.2.cv2.bn",
+      "kind": "batchnorm",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        16,
+        160,
+        160
+      ],
+      "fp32_ms": 0.08460000390186906,
+      "fp16_ms": 0.10244999430142343
+    },
+    {
+      "layer": "stem.2.cv2.act",
+      "kind": "silu",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        16,
+        160,
+        160
+      ],
+      "fp32_ms": 0.040099985199049115,
+      "fp16_ms": 0.03540000761859119
+    },
+    {
+      "layer": "stem.2.blocks.0.conv",
+      "kind": "conv 3x3",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        16,
+        160,
+        160
+      ],
+      "fp32_ms": 0.18510001245886087,
+      "fp16_ms": 0.37915000575594604
+    },
+    {
+      "layer": "stem.2.blocks.0.bn",
+      "kind": "batchnorm",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        16,
+        160,
+        160
+      ],
+      "fp32_ms": 0.08420000085607171,
+      "fp16_ms": 0.10040000779554248
+    },
+    {
+      "layer": "stem.2.blocks.0.act",
+      "kind": "silu",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        16,
+        160,
+        160
+      ],
+      "fp32_ms": 0.04025001544505358,
+      "fp16_ms": 0.03510000533424318
+    },
+    {
+      "layer": "stem.2.blocks.1.conv",
+      "kind": "conv 3x3",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        16,
+        160,
+        160
+      ],
+      "fp32_ms": 0.18489998183213174,
+      "fp16_ms": 0.377349992049858
+    },
+    {
+      "layer": "stem.2.blocks.1.bn",
+      "kind": "batchnorm",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        16,
+        160,
+        160
+      ],
+      "fp32_ms": 0.08329999400302768,
+      "fp16_ms": 0.10050000855699182
+    },
+    {
+      "layer": "stem.2.blocks.1.act",
+      "kind": "silu",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        16,
+        160,
+        160
+      ],
+      "fp32_ms": 0.04010001430287957,
+      "fp16_ms": 0.03419996937736869
+    },
+    {
+      "layer": "stem.2.cv3.conv",
+      "kind": "conv 1x1",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        64,
+        160,
+        160
+      ],
+      "fp32_ms": 0.12809998588636518,
+      "fp16_ms": 0.76299998909235
+    },
+    {
+      "layer": "stem.2.cv3.bn",
+      "kind": "batchnorm",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        32,
+        160,
+        160
+      ],
+      "fp32_ms": 0.10909998673014343,
+      "fp16_ms": 0.11809996794909239
+    },
+    {
+      "layer": "stem.2.cv3.act",
+      "kind": "silu",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        32,
+        160,
+        160
+      ],
+      "fp32_ms": 0.05810000584460795,
+      "fp16_ms": 0.05025000427849591
+    },
+    {
+      "layer": "down_p3.conv.conv",
+      "kind": "conv 3x3 stride 2",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        32,
+        160,
+        160
+      ],
+      "fp32_ms": 0.162499985890463,
+      "fp16_ms": 0.5626000056508929
+    },
+    {
+      "layer": "down_p3.conv.bn",
+      "kind": "batchnorm",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.07890001870691776,
+      "fp16_ms": 0.09240000508725643
+    },
+    {
+      "layer": "down_p3.conv.act",
+      "kind": "silu",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.03994998405687511,
+      "fp16_ms": 0.03244998515583575
+    },
+    {
+      "layer": "elan_p3_bb.cv1.conv",
+      "kind": "conv 1x1",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.07069995626807213,
+      "fp16_ms": 0.22724998416379094
+    },
+    {
+      "layer": "elan_p3_bb.cv1.bn",
+      "kind": "batchnorm",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        32,
+        80,
+        80
+      ],
+      "fp32_ms": 0.07065001409500837,
+      "fp16_ms": 0.09154999861493707
+    },
+    {
+      "layer": "elan_p3_bb.cv1.act",
+      "kind": "silu",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        32,
+        80,
+        80
+      ],
+      "fp32_ms": 0.03104997449554503,
+      "fp16_ms": 0.027600035537034273
+    },
+    {
+      "layer": "elan_p3_bb.cv2.conv",
+      "kind": "conv 1x1",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.07104998803697526,
+      "fp16_ms": 0.22659997921437025
+    },
+    {
+      "layer": "elan_p3_bb.cv2.bn",
+      "kind": "batchnorm",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        32,
+        80,
+        80
+      ],
+      "fp32_ms": 0.07139996159821749,
+      "fp16_ms": 0.09140002657659352
+    },
+    {
+      "layer": "elan_p3_bb.cv2.act",
+      "kind": "silu",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        32,
+        80,
+        80
+      ],
+      "fp32_ms": 0.031000003218650818,
+      "fp16_ms": 0.028050009859725833
+    },
+    {
+      "layer": "elan_p3_bb.blocks.0.conv",
+      "kind": "conv 3x3",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        32,
+        80,
+        80
+      ],
+      "fp32_ms": 0.1015499874483794,
+      "fp16_ms": 0.3335000074002892
+    },
+    {
+      "layer": "elan_p3_bb.blocks.0.bn",
+      "kind": "batchnorm",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        32,
+        80,
+        80
+      ],
+      "fp32_ms": 0.07124998955987394,
+      "fp16_ms": 0.09079999290406704
+    },
+    {
+      "layer": "elan_p3_bb.blocks.0.act",
+      "kind": "silu",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        32,
+        80,
+        80
+      ],
+      "fp32_ms": 0.031050003599375486,
+      "fp16_ms": 0.027900008717551827
+    },
+    {
+      "layer": "elan_p3_bb.blocks.1.conv",
+      "kind": "conv 3x3",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        32,
+        80,
+        80
+      ],
+      "fp32_ms": 0.10024997754953802,
+      "fp16_ms": 0.3311500186100602
+    },
+    {
+      "layer": "elan_p3_bb.blocks.1.bn",
+      "kind": "batchnorm",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        32,
+        80,
+        80
+      ],
+      "fp32_ms": 0.07124996045604348,
+      "fp16_ms": 0.09129999671131372
+    },
+    {
+      "layer": "elan_p3_bb.blocks.1.act",
+      "kind": "silu",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        32,
+        80,
+        80
+      ],
+      "fp32_ms": 0.031400006264448166,
+      "fp16_ms": 0.027900008717551827
+    },
+    {
+      "layer": "elan_p3_bb.cv3.conv",
+      "kind": "conv 1x1",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        128,
+        80,
+        80
+      ],
+      "fp32_ms": 0.09754998609423637,
+      "fp16_ms": 0.41405000956729054
+    },
+    {
+      "layer": "elan_p3_bb.cv3.bn",
+      "kind": "batchnorm",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.09519996820017695,
+      "fp16_ms": 0.10164998820982873
+    },
+    {
+      "layer": "elan_p3_bb.cv3.act",
+      "kind": "silu",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.03980001201853156,
+      "fp16_ms": 0.03239998477511108
+    },
+    {
+      "layer": "down_p4.conv.conv",
+      "kind": "conv 3x3 stride 2",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.15680002979934216,
+      "fp16_ms": 0.42560003930702806
+    },
+    {
+      "layer": "down_p4.conv.bn",
+      "kind": "batchnorm",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.0882500025909394,
+      "fp16_ms": 0.12560002505779266
+    },
+    {
+      "layer": "down_p4.conv.act",
+      "kind": "silu",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.03845000173896551,
+      "fp16_ms": 0.029600021662190557
+    },
+    {
+      "layer": "elan_p4_bb.cv1.conv",
+      "kind": "conv 1x1",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.06699998630210757,
+      "fp16_ms": 0.11789999553002417
+    },
+    {
+      "layer": "elan_p4_bb.cv1.bn",
+      "kind": "batchnorm",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        48,
+        40,
+        40
+      ],
+      "fp32_ms": 0.06995000876486301,
+      "fp16_ms": 0.08929998148232698
+    },
+    {
+      "layer": "elan_p4_bb.cv1.act",
+      "kind": "silu",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        48,
+        40,
+        40
+      ],
+      "fp32_ms": 0.0315000070258975,
+      "fp16_ms": 0.03095000283792615
+    },
+    {
+      "layer": "elan_p4_bb.cv2.conv",
+      "kind": "conv 1x1",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.06779999239370227,
+      "fp16_ms": 0.11679998715408146
+    },
+    {
+      "layer": "elan_p4_bb.cv2.bn",
+      "kind": "batchnorm",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        48,
+        40,
+        40
+      ],
+      "fp32_ms": 0.06839999696239829,
+      "fp16_ms": 0.09024998871609569
+    },
+    {
+      "layer": "elan_p4_bb.cv2.act",
+      "kind": "silu",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        48,
+        40,
+        40
+      ],
+      "fp32_ms": 0.029999995604157448,
+      "fp16_ms": 0.03060000017285347
+    },
+    {
+      "layer": "elan_p4_bb.blocks.0.conv",
+      "kind": "conv 3x3",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        48,
+        40,
+        40
+      ],
+      "fp32_ms": 0.09615000453777611,
+      "fp16_ms": 0.533199985511601
+    },
+    {
+      "layer": "elan_p4_bb.blocks.0.bn",
+      "kind": "batchnorm",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        48,
+        40,
+        40
+      ],
+      "fp32_ms": 0.069500005338341,
+      "fp16_ms": 0.08954998338595033
+    },
+    {
+      "layer": "elan_p4_bb.blocks.0.act",
+      "kind": "silu",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        48,
+        40,
+        40
+      ],
+      "fp32_ms": 0.030800001695752144,
+      "fp16_ms": 0.030949973734095693
+    },
+    {
+      "layer": "elan_p4_bb.blocks.1.conv",
+      "kind": "conv 3x3",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        48,
+        40,
+        40
+      ],
+      "fp32_ms": 0.09740001405589283,
+      "fp16_ms": 0.534399994648993
+    },
+    {
+      "layer": "elan_p4_bb.blocks.1.bn",
+      "kind": "batchnorm",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        48,
+        40,
+        40
+      ],
+      "fp32_ms": 0.06919997395016253,
+      "fp16_ms": 0.09104999480769038
+    },
+    {
+      "layer": "elan_p4_bb.blocks.1.act",
+      "kind": "silu",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        48,
+        40,
+        40
+      ],
+      "fp32_ms": 0.03270001616328955,
+      "fp16_ms": 0.03165000816807151
+    },
+    {
+      "layer": "elan_p4_bb.cv3.conv",
+      "kind": "conv 1x1",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        192,
+        40,
+        40
+      ],
+      "fp32_ms": 0.08720002369955182,
+      "fp16_ms": 0.30914999661035836
+    },
+    {
+      "layer": "elan_p4_bb.cv3.bn",
+      "kind": "batchnorm",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.06920000305399299,
+      "fp16_ms": 0.08949998300522566
+    },
+    {
+      "layer": "elan_p4_bb.cv3.act",
+      "kind": "silu",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.0305499997921288,
+      "fp16_ms": 0.03125000512227416
+    },
+    {
+      "layer": "down_p5.conv.conv",
+      "kind": "conv 3x3 stride 2",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.15539999003522098,
+      "fp16_ms": 0.30464999144896865
+    },
+    {
+      "layer": "down_p5.conv.bn",
+      "kind": "batchnorm",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.07010000990703702,
+      "fp16_ms": 0.08994998643174767
+    },
+    {
+      "layer": "down_p5.conv.act",
+      "kind": "silu",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.03209995338693261,
+      "fp16_ms": 0.03190001007169485
+    },
+    {
+      "layer": "elan_p5_bb.cv1.conv",
+      "kind": "conv 1x1",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.06779999239370227,
+      "fp16_ms": 0.13095000758767128
+    },
+    {
+      "layer": "elan_p5_bb.cv1.bn",
+      "kind": "batchnorm",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        64,
+        20,
+        20
+      ],
+      "fp32_ms": 0.10639999527484179,
+      "fp16_ms": 0.19325001630932093
+    },
+    {
+      "layer": "elan_p5_bb.cv1.act",
+      "kind": "silu",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        64,
+        20,
+        20
+      ],
+      "fp32_ms": 0.06634998135268688,
+      "fp16_ms": 0.06634998135268688
+    },
+    {
+      "layer": "elan_p5_bb.cv2.conv",
+      "kind": "conv 1x1",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.10389997623860836,
+      "fp16_ms": 0.09554999996908009
+    },
+    {
+      "layer": "elan_p5_bb.cv2.bn",
+      "kind": "batchnorm",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        64,
+        20,
+        20
+      ],
+      "fp32_ms": 0.06960000609979033,
+      "fp16_ms": 0.09044999023899436
+    },
+    {
+      "layer": "elan_p5_bb.cv2.act",
+      "kind": "silu",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        64,
+        20,
+        20
+      ],
+      "fp32_ms": 0.031400006264448166,
+      "fp16_ms": 0.0305499997921288
+    },
+    {
+      "layer": "elan_p5_bb.blocks.0.conv",
+      "kind": "conv 3x3",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        64,
+        20,
+        20
+      ],
+      "fp32_ms": 0.07335000555031002,
+      "fp16_ms": 0.19195000641047955
+    },
+    {
+      "layer": "elan_p5_bb.blocks.0.bn",
+      "kind": "batchnorm",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        64,
+        20,
+        20
+      ],
+      "fp32_ms": 0.07200002437457442,
+      "fp16_ms": 0.09029998909682035
+    },
+    {
+      "layer": "elan_p5_bb.blocks.0.act",
+      "kind": "silu",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        64,
+        20,
+        20
+      ],
+      "fp32_ms": 0.031200004741549492,
+      "fp16_ms": 0.029699993319809437
+    },
+    {
+      "layer": "elan_p5_bb.blocks.1.conv",
+      "kind": "conv 3x3",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        64,
+        20,
+        20
+      ],
+      "fp32_ms": 0.07479998748749495,
+      "fp16_ms": 0.20860001677647233
+    },
+    {
+      "layer": "elan_p5_bb.blocks.1.bn",
+      "kind": "batchnorm",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        64,
+        20,
+        20
+      ],
+      "fp32_ms": 0.07095001637935638,
+      "fp16_ms": 0.09200000204145908
+    },
+    {
+      "layer": "elan_p5_bb.blocks.1.act",
+      "kind": "silu",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        64,
+        20,
+        20
+      ],
+      "fp32_ms": 0.03220001235604286,
+      "fp16_ms": 0.03065000055357814
+    },
+    {
+      "layer": "elan_p5_bb.cv3.conv",
+      "kind": "conv 1x1",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        256,
+        20,
+        20
+      ],
+      "fp32_ms": 0.07299997378140688,
+      "fp16_ms": 0.13845000648871064
+    },
+    {
+      "layer": "elan_p5_bb.cv3.bn",
+      "kind": "batchnorm",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.07240002742037177,
+      "fp16_ms": 0.09310001041740179
+    },
+    {
+      "layer": "elan_p5_bb.cv3.act",
+      "kind": "silu",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.031999952625483274,
+      "fp16_ms": 0.030499999411404133
+    },
+    {
+      "layer": "sppf_p5.cv1.conv",
+      "kind": "conv 1x1",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.06745001883246005,
+      "fp16_ms": 0.09590003173798323
+    },
+    {
+      "layer": "sppf_p5.cv1.bn",
+      "kind": "batchnorm",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        64,
+        20,
+        20
+      ],
+      "fp32_ms": 0.07010000990703702,
+      "fp16_ms": 0.08969998452812433
+    },
+    {
+      "layer": "sppf_p5.cv1.act",
+      "kind": "silu",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        64,
+        20,
+        20
+      ],
+      "fp32_ms": 0.03160000778734684,
+      "fp16_ms": 0.03024999750778079
+    },
+    {
+      "layer": "sppf_p5.pool",
+      "kind": "maxpool",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        64,
+        20,
+        20
+      ],
+      "fp32_ms": 0.04290003562346101,
+      "fp16_ms": 0.04394998541101813
+    },
+    {
+      "layer": "sppf_p5.pool",
+      "kind": "maxpool",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        64,
+        20,
+        20
+      ],
+      "fp32_ms": 0.04279997665435076,
+      "fp16_ms": 0.04295003600418568
+    },
+    {
+      "layer": "sppf_p5.pool",
+      "kind": "maxpool",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        64,
+        20,
+        20
+      ],
+      "fp32_ms": 0.04299997817724943,
+      "fp16_ms": 0.04290000651963055
+    },
+    {
+      "layer": "sppf_p5.cv2.conv",
+      "kind": "conv 1x1",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        256,
+        20,
+        20
+      ],
+      "fp32_ms": 0.07160002132877707,
+      "fp16_ms": 0.13830000534653664
+    },
+    {
+      "layer": "sppf_p5.cv2.bn",
+      "kind": "batchnorm",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.0708999577909708,
+      "fp16_ms": 0.08950001210905612
+    },
+    {
+      "layer": "sppf_p5.cv2.act",
+      "kind": "silu",
+      "stage": "backbone",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.0305499997921288,
+      "fp16_ms": 0.02994999522343278
+    },
+    {
+      "layer": "head1.scale_heads.0.cls_stem.0.conv",
+      "kind": "conv 3x3",
+      "stage": "head1",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.1976999919861555,
+      "fp16_ms": 1.0207999730482697
+    },
+    {
+      "layer": "head1.scale_heads.0.cls_stem.0.bn",
+      "kind": "batchnorm",
+      "stage": "head1",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.07740000728517771,
+      "fp16_ms": 0.09919999865815043
+    },
+    {
+      "layer": "head1.scale_heads.0.cls_stem.0.act",
+      "kind": "silu",
+      "stage": "head1",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.04244997398927808,
+      "fp16_ms": 0.035949982702732086
+    },
+    {
+      "layer": "head1.scale_heads.0.cls_stem.1.conv",
+      "kind": "conv 3x3",
+      "stage": "head1",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.1944000250659883,
+      "fp16_ms": 1.007850019959733
+    },
+    {
+      "layer": "head1.scale_heads.0.cls_stem.1.bn",
+      "kind": "batchnorm",
+      "stage": "head1",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.079699995694682,
+      "fp16_ms": 0.09154999861493707
+    },
+    {
+      "layer": "head1.scale_heads.0.cls_stem.1.act",
+      "kind": "silu",
+      "stage": "head1",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.038300000596791506,
+      "fp16_ms": 0.03220001235604286
+    },
+    {
+      "layer": "head1.scale_heads.0.reg_stem.0.conv",
+      "kind": "conv 3x3",
+      "stage": "head1",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.1941499940585345,
+      "fp16_ms": 0.9987500379793346
+    },
+    {
+      "layer": "head1.scale_heads.0.reg_stem.0.bn",
+      "kind": "batchnorm",
+      "stage": "head1",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.07835001451894641,
+      "fp16_ms": 0.09544999920763075
+    },
+    {
+      "layer": "head1.scale_heads.0.reg_stem.0.act",
+      "kind": "silu",
+      "stage": "head1",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.039449980249628425,
+      "fp16_ms": 0.03220001235604286
+    },
+    {
+      "layer": "head1.scale_heads.0.reg_stem.1.conv",
+      "kind": "conv 3x3",
+      "stage": "head1",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.1936999906320125,
+      "fp16_ms": 1.0024000075645745
+    },
+    {
+      "layer": "head1.scale_heads.0.reg_stem.1.bn",
+      "kind": "batchnorm",
+      "stage": "head1",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.07869998808018863,
+      "fp16_ms": 0.09114999556913972
+    },
+    {
+      "layer": "head1.scale_heads.0.reg_stem.1.act",
+      "kind": "silu",
+      "stage": "head1",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.039350008592009544,
+      "fp16_ms": 0.032549985917285085
+    },
+    {
+      "layer": "head1.scale_heads.0.cls_pred",
+      "kind": "conv 1x1",
+      "stage": "head1",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.08739996701478958,
+      "fp16_ms": 0.23124998551793396
+    },
+    {
+      "layer": "head1.scale_heads.0.obj_pred",
+      "kind": "conv 1x1",
+      "stage": "head1",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.08839997462928295,
+      "fp16_ms": 0.08680002065375447
+    },
+    {
+      "layer": "head1.scale_heads.0.reg_pred",
+      "kind": "conv 1x1",
+      "stage": "head1",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.08590001380071044,
+      "fp16_ms": 0.23219999275170267
+    },
+    {
+      "layer": "head1.scale_heads.1.cls_stem.0.conv",
+      "kind": "conv 3x3",
+      "stage": "head1",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.15159999020397663,
+      "fp16_ms": 0.5873000482097268
+    },
+    {
+      "layer": "head1.scale_heads.1.cls_stem.0.bn",
+      "kind": "batchnorm",
+      "stage": "head1",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.069500005338341,
+      "fp16_ms": 0.08890003664419055
+    },
+    {
+      "layer": "head1.scale_heads.1.cls_stem.0.act",
+      "kind": "silu",
+      "stage": "head1",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.031000003218650818,
+      "fp16_ms": 0.028550013666972518
+    },
+    {
+      "layer": "head1.scale_heads.1.cls_stem.1.conv",
+      "kind": "conv 3x3",
+      "stage": "head1",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.1517999917268753,
+      "fp16_ms": 0.5863999831490219
+    },
+    {
+      "layer": "head1.scale_heads.1.cls_stem.1.bn",
+      "kind": "batchnorm",
+      "stage": "head1",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.07000000914558768,
+      "fp16_ms": 0.09569997200742364
+    },
+    {
+      "layer": "head1.scale_heads.1.cls_stem.1.act",
+      "kind": "silu",
+      "stage": "head1",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.03095000283792615,
+      "fp16_ms": 0.027099973522126675
+    },
+    {
+      "layer": "head1.scale_heads.1.reg_stem.0.conv",
+      "kind": "conv 3x3",
+      "stage": "head1",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.15219999477267265,
+      "fp16_ms": 0.5874499911442399
+    },
+    {
+      "layer": "head1.scale_heads.1.reg_stem.0.bn",
+      "kind": "batchnorm",
+      "stage": "head1",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.07064998499117792,
+      "fp16_ms": 0.09039998985826969
+    },
+    {
+      "layer": "head1.scale_heads.1.reg_stem.0.act",
+      "kind": "silu",
+      "stage": "head1",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.03060000017285347,
+      "fp16_ms": 0.026900030206888914
+    },
+    {
+      "layer": "head1.scale_heads.1.reg_stem.1.conv",
+      "kind": "conv 3x3",
+      "stage": "head1",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.15195002197287977,
+      "fp16_ms": 0.5877000221516937
+    },
+    {
+      "layer": "head1.scale_heads.1.reg_stem.1.bn",
+      "kind": "batchnorm",
+      "stage": "head1",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.0709999876562506,
+      "fp16_ms": 0.09124999633058906
+    },
+    {
+      "layer": "head1.scale_heads.1.reg_stem.1.act",
+      "kind": "silu",
+      "stage": "head1",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.0315000070258975,
+      "fp16_ms": 0.02729997504502535
+    },
+    {
+      "layer": "head1.scale_heads.1.cls_pred",
+      "kind": "conv 1x1",
+      "stage": "head1",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.08949998300522566,
+      "fp16_ms": 0.12649997370317578
+    },
+    {
+      "layer": "head1.scale_heads.1.obj_pred",
+      "kind": "conv 1x1",
+      "stage": "head1",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.09615000453777611,
+      "fp16_ms": 0.11935000657103956
+    },
+    {
+      "layer": "head1.scale_heads.1.reg_pred",
+      "kind": "conv 1x1",
+      "stage": "head1",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.1058999914675951,
+      "fp16_ms": 0.12650000280700624
+    },
+    {
+      "layer": "head1.scale_heads.2.cls_stem.0.conv",
+      "kind": "conv 3x3",
+      "stage": "head1",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.12144999345764518,
+      "fp16_ms": 0.3029000072274357
+    },
+    {
+      "layer": "head1.scale_heads.2.cls_stem.0.bn",
+      "kind": "batchnorm",
+      "stage": "head1",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.06999998004175723,
+      "fp16_ms": 0.08935001096688211
+    },
+    {
+      "layer": "head1.scale_heads.2.cls_stem.0.act",
+      "kind": "silu",
+      "stage": "head1",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.029449991416186094,
+      "fp16_ms": 0.029149989131838083
+    },
+    {
+      "layer": "head1.scale_heads.2.cls_stem.1.conv",
+      "kind": "conv 3x3",
+      "stage": "head1",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.12074998812749982,
+      "fp16_ms": 0.30479999259114265
+    },
+    {
+      "layer": "head1.scale_heads.2.cls_stem.1.bn",
+      "kind": "batchnorm",
+      "stage": "head1",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.0715500209480524,
+      "fp16_ms": 0.09089999366551638
+    },
+    {
+      "layer": "head1.scale_heads.2.cls_stem.1.act",
+      "kind": "silu",
+      "stage": "head1",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.06570000550709665,
+      "fp16_ms": 0.06605000817216933
+    },
+    {
+      "layer": "head1.scale_heads.2.reg_stem.0.conv",
+      "kind": "conv 3x3",
+      "stage": "head1",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.15295000048354268,
+      "fp16_ms": 0.3701999958138913
+    },
+    {
+      "layer": "head1.scale_heads.2.reg_stem.0.bn",
+      "kind": "batchnorm",
+      "stage": "head1",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.08834997424855828,
+      "fp16_ms": 0.09310001041740179
+    },
+    {
+      "layer": "head1.scale_heads.2.reg_stem.0.act",
+      "kind": "silu",
+      "stage": "head1",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.030349998269230127,
+      "fp16_ms": 0.030250026611611247
+    },
+    {
+      "layer": "head1.scale_heads.2.reg_stem.1.conv",
+      "kind": "conv 3x3",
+      "stage": "head1",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.1215000229422003,
+      "fp16_ms": 0.30429998878389597
+    },
+    {
+      "layer": "head1.scale_heads.2.reg_stem.1.bn",
+      "kind": "batchnorm",
+      "stage": "head1",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.07029998232610524,
+      "fp16_ms": 0.09315001079812646
+    },
+    {
+      "layer": "head1.scale_heads.2.reg_stem.1.act",
+      "kind": "silu",
+      "stage": "head1",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.03440000000409782,
+      "fp16_ms": 0.0315000070258975
+    },
+    {
+      "layer": "head1.scale_heads.2.cls_pred",
+      "kind": "conv 1x1",
+      "stage": "head1",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.08859997615218163,
+      "fp16_ms": 0.1582999830134213
+    },
+    {
+      "layer": "head1.scale_heads.2.obj_pred",
+      "kind": "conv 1x1",
+      "stage": "head1",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.11844997061416507,
+      "fp16_ms": 0.1011500135064125
+    },
+    {
+      "layer": "head1.scale_heads.2.reg_pred",
+      "kind": "conv 1x1",
+      "stage": "head1",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.09365001460537314,
+      "fp16_ms": 0.09129999671131372
+    },
+    {
+      "layer": "reduce_p5_to_p4.conv",
+      "kind": "conv 1x1",
+      "stage": "fpn",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.06845002644695342,
+      "fp16_ms": 0.10835001012310386
+    },
+    {
+      "layer": "reduce_p5_to_p4.bn",
+      "kind": "batchnorm",
+      "stage": "fpn",
+      "input_shape": [
+        1,
+        96,
+        20,
+        20
+      ],
+      "fp32_ms": 0.07145002018660307,
+      "fp16_ms": 0.09225000394508243
+    },
+    {
+      "layer": "reduce_p5_to_p4.act",
+      "kind": "silu",
+      "stage": "fpn",
+      "input_shape": [
+        1,
+        96,
+        20,
+        20
+      ],
+      "fp32_ms": 0.030700000934302807,
+      "fp16_ms": 0.028850045055150986
+    },
+    {
+      "layer": "up1.up",
+      "kind": "upsample",
+      "stage": "fpn",
+      "input_shape": [
+        1,
+        96,
+        20,
+        20
+      ],
+      "fp32_ms": 0.04249997437000275,
+      "fp16_ms": 0.04220003029331565
+    },
+    {
+      "layer": "elan_p4_td.cv1.conv",
+      "kind": "conv 1x1",
+      "stage": "fpn",
+      "input_shape": [
+        1,
+        192,
+        40,
+        40
+      ],
+      "fp32_ms": 0.07499998901039362,
+      "fp16_ms": 0.18244999228045344
+    },
+    {
+      "layer": "elan_p4_td.cv1.bn",
+      "kind": "batchnorm",
+      "stage": "fpn",
+      "input_shape": [
+        1,
+        48,
+        40,
+        40
+      ],
+      "fp32_ms": 0.07130001904442906,
+      "fp16_ms": 0.0932500115595758
+    },
+    {
+      "layer": "elan_p4_td.cv1.act",
+      "kind": "silu",
+      "stage": "fpn",
+      "input_shape": [
+        1,
+        48,
+        40,
+        40
+      ],
+      "fp32_ms": 0.02750000567175448,
+      "fp16_ms": 0.052350020268931985
+    },
+    {
+      "layer": "elan_p4_td.cv2.conv",
+      "kind": "conv 1x1",
+      "stage": "fpn",
+      "input_shape": [
+        1,
+        192,
+        40,
+        40
+      ],
+      "fp32_ms": 0.07524999091401696,
+      "fp16_ms": 0.18199998885393143
+    },
+    {
+      "layer": "elan_p4_td.cv2.bn",
+      "kind": "batchnorm",
+      "stage": "fpn",
+      "input_shape": [
+        1,
+        48,
+        40,
+        40
+      ],
+      "fp32_ms": 0.0716999638825655,
+      "fp16_ms": 0.09265000699087977
+    },
+    {
+      "layer": "elan_p4_td.cv2.act",
+      "kind": "silu",
+      "stage": "fpn",
+      "input_shape": [
+        1,
+        48,
+        40,
+        40
+      ],
+      "fp32_ms": 0.03170000854879618,
+      "fp16_ms": 0.03090000245720148
+    },
+    {
+      "layer": "elan_p4_td.blocks.0.conv",
+      "kind": "conv 3x3",
+      "stage": "fpn",
+      "input_shape": [
+        1,
+        48,
+        40,
+        40
+      ],
+      "fp32_ms": 0.12179999612271786,
+      "fp16_ms": 0.5499999970197678
+    },
+    {
+      "layer": "elan_p4_td.blocks.0.bn",
+      "kind": "batchnorm",
+      "stage": "fpn",
+      "input_shape": [
+        1,
+        48,
+        40,
+        40
+      ],
+      "fp32_ms": 0.09945002966560423,
+      "fp16_ms": 0.1136000209953636
+    },
+    {
+      "layer": "elan_p4_td.blocks.0.act",
+      "kind": "silu",
+      "stage": "fpn",
+      "input_shape": [
+        1,
+        48,
+        40,
+        40
+      ],
+      "fp32_ms": 0.02785000833682716,
+      "fp16_ms": 0.035500008380040526
+    },
+    {
+      "layer": "elan_p4_td.blocks.1.conv",
+      "kind": "conv 3x3",
+      "stage": "fpn",
+      "input_shape": [
+        1,
+        48,
+        40,
+        40
+      ],
+      "fp32_ms": 0.0973499845713377,
+      "fp16_ms": 0.6005500326864421
+    },
+    {
+      "layer": "elan_p4_td.blocks.1.bn",
+      "kind": "batchnorm",
+      "stage": "fpn",
+      "input_shape": [
+        1,
+        48,
+        40,
+        40
+      ],
+      "fp32_ms": 0.06849999772384763,
+      "fp16_ms": 0.09224997484125197
+    },
+    {
+      "layer": "elan_p4_td.blocks.1.act",
+      "kind": "silu",
+      "stage": "fpn",
+      "input_shape": [
+        1,
+        48,
+        40,
+        40
+      ],
+      "fp32_ms": 0.034649972803890705,
+      "fp16_ms": 0.030149996746331453
+    },
+    {
+      "layer": "elan_p4_td.cv3.conv",
+      "kind": "conv 1x1",
+      "stage": "fpn",
+      "input_shape": [
+        1,
+        192,
+        40,
+        40
+      ],
+      "fp32_ms": 0.08719999459572136,
+      "fp16_ms": 0.3096499713137746
+    },
+    {
+      "layer": "elan_p4_td.cv3.bn",
+      "kind": "batchnorm",
+      "stage": "fpn",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.09975000284612179,
+      "fp16_ms": 0.09824999142438173
+    },
+    {
+      "layer": "elan_p4_td.cv3.act",
+      "kind": "silu",
+      "stage": "fpn",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.030449999030679464,
+      "fp16_ms": 0.031200004741549492
+    },
+    {
+      "layer": "reduce_p4_to_p3.conv",
+      "kind": "conv 1x1",
+      "stage": "fpn",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.06729998858645558,
+      "fp16_ms": 0.15239999629557133
+    },
+    {
+      "layer": "reduce_p4_to_p3.bn",
+      "kind": "batchnorm",
+      "stage": "fpn",
+      "input_shape": [
+        1,
+        64,
+        40,
+        40
+      ],
+      "fp32_ms": 0.07244999869726598,
+      "fp16_ms": 0.09144999785348773
+    },
+    {
+      "layer": "reduce_p4_to_p3.act",
+      "kind": "silu",
+      "stage": "fpn",
+      "input_shape": [
+        1,
+        64,
+        40,
+        40
+      ],
+      "fp32_ms": 0.030250026611611247,
+      "fp16_ms": 0.028999987989664078
+    },
+    {
+      "layer": "up2.up",
+      "kind": "upsample",
+      "stage": "fpn",
+      "input_shape": [
+        1,
+        64,
+        40,
+        40
+      ],
+      "fp32_ms": 0.057399971410632133,
+      "fp16_ms": 0.04404998617246747
+    },
+    {
+      "layer": "elan_p3_td.cv1.conv",
+      "kind": "conv 1x1",
+      "stage": "fpn",
+      "input_shape": [
+        1,
+        128,
+        80,
+        80
+      ],
+      "fp32_ms": 0.08515000808984041,
+      "fp16_ms": 0.4002499917987734
+    },
+    {
+      "layer": "elan_p3_td.cv1.bn",
+      "kind": "batchnorm",
+      "stage": "fpn",
+      "input_shape": [
+        1,
+        32,
+        80,
+        80
+      ],
+      "fp32_ms": 0.06980000762268901,
+      "fp16_ms": 0.09030001820065081
+    },
+    {
+      "layer": "elan_p3_td.cv1.act",
+      "kind": "silu",
+      "stage": "fpn",
+      "input_shape": [
+        1,
+        32,
+        80,
+        80
+      ],
+      "fp32_ms": 0.029000017093494534,
+      "fp16_ms": 0.03515000571496785
+    },
+    {
+      "layer": "elan_p3_td.cv2.conv",
+      "kind": "conv 1x1",
+      "stage": "fpn",
+      "input_shape": [
+        1,
+        128,
+        80,
+        80
+      ],
+      "fp32_ms": 0.08440000237897038,
+      "fp16_ms": 0.4066500114277005
+    },
+    {
+      "layer": "elan_p3_td.cv2.bn",
+      "kind": "batchnorm",
+      "stage": "fpn",
+      "input_shape": [
+        1,
+        32,
+        80,
+        80
+      ],
+      "fp32_ms": 0.10760000441223383,
+      "fp16_ms": 0.19599997904151678
+    },
+    {
+      "layer": "elan_p3_td.cv2.act",
+      "kind": "silu",
+      "stage": "fpn",
+      "input_shape": [
+        1,
+        32,
+        80,
+        80
+      ],
+      "fp32_ms": 0.06615000893361866,
+      "fp16_ms": 0.02819998189806938
+    },
+    {
+      "layer": "elan_p3_td.blocks.0.conv",
+      "kind": "conv 3x3",
+      "stage": "fpn",
+      "input_shape": [
+        1,
+        32,
+        80,
+        80
+      ],
+      "fp32_ms": 0.10120001388713717,
+      "fp16_ms": 0.33329997677356005
+    },
+    {
+      "layer": "elan_p3_td.blocks.0.bn",
+      "kind": "batchnorm",
+      "stage": "fpn",
+      "input_shape": [
+        1,
+        32,
+        80,
+        80
+      ],
+      "fp32_ms": 0.0727999722585082,
+      "fp16_ms": 0.09244994726032019
+    },
+    {
+      "layer": "elan_p3_td.blocks.0.act",
+      "kind": "silu",
+      "stage": "fpn",
+      "input_shape": [
+        1,
+        32,
+        80,
+        80
+      ],
+      "fp32_ms": 0.028049980755895376,
+      "fp16_ms": 0.027300004148855805
+    },
+    {
+      "layer": "elan_p3_td.blocks.1.conv",
+      "kind": "conv 3x3",
+      "stage": "fpn",
+      "input_shape": [
+        1,
+        32,
+        80,
+        80
+      ],
+      "fp32_ms": 0.10140001541003585,
+      "fp16_ms": 0.33320000511594117
+    },
+    {
+      "layer": "elan_p3_td.blocks.1.bn",
+      "kind": "batchnorm",
+      "stage": "fpn",
+      "input_shape": [
+        1,
+        32,
+        80,
+        80
+      ],
+      "fp32_ms": 0.0810499768704176,
+      "fp16_ms": 0.1306000049225986
+    },
+    {
+      "layer": "elan_p3_td.blocks.1.act",
+      "kind": "silu",
+      "stage": "fpn",
+      "input_shape": [
+        1,
+        32,
+        80,
+        80
+      ],
+      "fp32_ms": 0.039300008211284876,
+      "fp16_ms": 0.02759997732937336
+    },
+    {
+      "layer": "elan_p3_td.cv3.conv",
+      "kind": "conv 1x1",
+      "stage": "fpn",
+      "input_shape": [
+        1,
+        128,
+        80,
+        80
+      ],
+      "fp32_ms": 0.09790001786313951,
+      "fp16_ms": 0.408699968829751
+    },
+    {
+      "layer": "elan_p3_td.cv3.bn",
+      "kind": "batchnorm",
+      "stage": "fpn",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.07990002632141113,
+      "fp16_ms": 0.09270000737160444
+    },
+    {
+      "layer": "elan_p3_td.cv3.act",
+      "kind": "silu",
+      "stage": "fpn",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.039000005926936865,
+      "fp16_ms": 0.031400006264448166
+    },
+    {
+      "layer": "head2.scale_heads.0.cls_stem.0.conv",
+      "kind": "conv 3x3",
+      "stage": "head2",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.1938499917741865,
+      "fp16_ms": 1.0038000182248652
+    },
+    {
+      "layer": "head2.scale_heads.0.cls_stem.0.bn",
+      "kind": "batchnorm",
+      "stage": "head2",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.09389998740516603,
+      "fp16_ms": 0.1272499794140458
+    },
+    {
+      "layer": "head2.scale_heads.0.cls_stem.0.act",
+      "kind": "silu",
+      "stage": "head2",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.053499999921768904,
+      "fp16_ms": 0.03234998439438641
+    },
+    {
+      "layer": "head2.scale_heads.0.cls_stem.1.conv",
+      "kind": "conv 3x3",
+      "stage": "head2",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.22564997198060155,
+      "fp16_ms": 1.0019500041380525
+    },
+    {
+      "layer": "head2.scale_heads.0.cls_stem.1.bn",
+      "kind": "batchnorm",
+      "stage": "head2",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.0791500206105411,
+      "fp16_ms": 0.09290000889450312
+    },
+    {
+      "layer": "head2.scale_heads.0.cls_stem.1.act",
+      "kind": "silu",
+      "stage": "head2",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.04020001506432891,
+      "fp16_ms": 0.03250001464039087
+    },
+    {
+      "layer": "head2.scale_heads.0.reg_stem.0.conv",
+      "kind": "conv 3x3",
+      "stage": "head2",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.19299998530186713,
+      "fp16_ms": 0.9996999870054424
+    },
+    {
+      "layer": "head2.scale_heads.0.reg_stem.0.bn",
+      "kind": "batchnorm",
+      "stage": "head2",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.0785999873187393,
+      "fp16_ms": 0.09374998626299202
+    },
+    {
+      "layer": "head2.scale_heads.0.reg_stem.0.act",
+      "kind": "silu",
+      "stage": "head2",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.039950013160705566,
+      "fp16_ms": 0.046299974201247096
+    },
+    {
+      "layer": "head2.scale_heads.0.reg_stem.1.conv",
+      "kind": "conv 3x3",
+      "stage": "head2",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.1972499885596335,
+      "fp16_ms": 1.0226499871350825
+    },
+    {
+      "layer": "head2.scale_heads.0.reg_stem.1.bn",
+      "kind": "batchnorm",
+      "stage": "head2",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.07904999074526131,
+      "fp16_ms": 0.0924500054679811
+    },
+    {
+      "layer": "head2.scale_heads.0.reg_stem.1.act",
+      "kind": "silu",
+      "stage": "head2",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.04460001946426928,
+      "fp16_ms": 0.033249991247430444
+    },
+    {
+      "layer": "head2.scale_heads.0.cls_pred",
+      "kind": "conv 1x1",
+      "stage": "head2",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.08970001363195479,
+      "fp16_ms": 0.23114998475648463
+    },
+    {
+      "layer": "head2.scale_heads.0.obj_pred",
+      "kind": "conv 1x1",
+      "stage": "head2",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.09079999290406704,
+      "fp16_ms": 0.08880003588274121
+    },
+    {
+      "layer": "head2.scale_heads.0.reg_pred",
+      "kind": "conv 1x1",
+      "stage": "head2",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.08839997462928295,
+      "fp16_ms": 0.27004998992197216
+    },
+    {
+      "layer": "head2.scale_heads.1.cls_stem.0.conv",
+      "kind": "conv 3x3",
+      "stage": "head2",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.1879000337794423,
+      "fp16_ms": 0.6116500007919967
+    },
+    {
+      "layer": "head2.scale_heads.1.cls_stem.0.bn",
+      "kind": "batchnorm",
+      "stage": "head2",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.06849999772384763,
+      "fp16_ms": 0.11705001816153526
+    },
+    {
+      "layer": "head2.scale_heads.1.cls_stem.0.act",
+      "kind": "silu",
+      "stage": "head2",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.03024999750778079,
+      "fp16_ms": 0.027000001864507794
+    },
+    {
+      "layer": "head2.scale_heads.1.cls_stem.1.conv",
+      "kind": "conv 3x3",
+      "stage": "head2",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.15259999781847,
+      "fp16_ms": 0.5866499850526452
+    },
+    {
+      "layer": "head2.scale_heads.1.cls_stem.1.bn",
+      "kind": "batchnorm",
+      "stage": "head2",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.06925000343471766,
+      "fp16_ms": 0.09074999252334237
+    },
+    {
+      "layer": "head2.scale_heads.1.cls_stem.1.act",
+      "kind": "silu",
+      "stage": "head2",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.030499999411404133,
+      "fp16_ms": 0.030349998269230127
+    },
+    {
+      "layer": "head2.scale_heads.1.reg_stem.0.conv",
+      "kind": "conv 3x3",
+      "stage": "head2",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.15254999743774533,
+      "fp16_ms": 0.5879999953322113
+    },
+    {
+      "layer": "head2.scale_heads.1.reg_stem.0.bn",
+      "kind": "batchnorm",
+      "stage": "head2",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.0712500186637044,
+      "fp16_ms": 0.09210000280290842
+    },
+    {
+      "layer": "head2.scale_heads.1.reg_stem.0.act",
+      "kind": "silu",
+      "stage": "head2",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.030499999411404133,
+      "fp16_ms": 0.03060000017285347
+    },
+    {
+      "layer": "head2.scale_heads.1.reg_stem.1.conv",
+      "kind": "conv 3x3",
+      "stage": "head2",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.15484998584724963,
+      "fp16_ms": 0.5906999867875129
+    },
+    {
+      "layer": "head2.scale_heads.1.reg_stem.1.bn",
+      "kind": "batchnorm",
+      "stage": "head2",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.069500005338341,
+      "fp16_ms": 0.08975001401267946
+    },
+    {
+      "layer": "head2.scale_heads.1.reg_stem.1.act",
+      "kind": "silu",
+      "stage": "head2",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.028399983420968056,
+      "fp16_ms": 0.03024999750778079
+    },
+    {
+      "layer": "head2.scale_heads.1.cls_pred",
+      "kind": "conv 1x1",
+      "stage": "head2",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.08965001325123012,
+      "fp16_ms": 0.1269499771296978
+    },
+    {
+      "layer": "head2.scale_heads.1.obj_pred",
+      "kind": "conv 1x1",
+      "stage": "head2",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.11069999891333282,
+      "fp16_ms": 0.0961000332608819
+    },
+    {
+      "layer": "head2.scale_heads.1.reg_pred",
+      "kind": "conv 1x1",
+      "stage": "head2",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.08700002217665315,
+      "fp16_ms": 0.12599999899975955
+    },
+    {
+      "layer": "head2.scale_heads.2.cls_stem.0.conv",
+      "kind": "conv 3x3",
+      "stage": "head2",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.12174999574199319,
+      "fp16_ms": 0.3040499868802726
+    },
+    {
+      "layer": "head2.scale_heads.2.cls_stem.0.bn",
+      "kind": "batchnorm",
+      "stage": "head2",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.07090001599863172,
+      "fp16_ms": 0.09049999061971903
+    },
+    {
+      "layer": "head2.scale_heads.2.cls_stem.0.act",
+      "kind": "silu",
+      "stage": "head2",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.03360002301633358,
+      "fp16_ms": 0.03189995186403394
+    },
+    {
+      "layer": "head2.scale_heads.2.cls_stem.1.conv",
+      "kind": "conv 3x3",
+      "stage": "head2",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.12209999840706587,
+      "fp16_ms": 0.3110000106971711
+    },
+    {
+      "layer": "head2.scale_heads.2.cls_stem.1.bn",
+      "kind": "batchnorm",
+      "stage": "head2",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.069500005338341,
+      "fp16_ms": 0.08914998034015298
+    },
+    {
+      "layer": "head2.scale_heads.2.cls_stem.1.act",
+      "kind": "silu",
+      "stage": "head2",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.030850002076476812,
+      "fp16_ms": 0.04695000825449824
+    },
+    {
+      "layer": "head2.scale_heads.2.reg_stem.0.conv",
+      "kind": "conv 3x3",
+      "stage": "head2",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.13000000035390258,
+      "fp16_ms": 0.3042499884031713
+    },
+    {
+      "layer": "head2.scale_heads.2.reg_stem.0.bn",
+      "kind": "batchnorm",
+      "stage": "head2",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.06930000381544232,
+      "fp16_ms": 0.08939998224377632
+    },
+    {
+      "layer": "head2.scale_heads.2.reg_stem.0.act",
+      "kind": "silu",
+      "stage": "head2",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.030700000934302807,
+      "fp16_ms": 0.03155000740662217
+    },
+    {
+      "layer": "head2.scale_heads.2.reg_stem.1.conv",
+      "kind": "conv 3x3",
+      "stage": "head2",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.12049998622387648,
+      "fp16_ms": 0.30345001141540706
+    },
+    {
+      "layer": "head2.scale_heads.2.reg_stem.1.bn",
+      "kind": "batchnorm",
+      "stage": "head2",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.06865002796985209,
+      "fp16_ms": 0.08880003588274121
+    },
+    {
+      "layer": "head2.scale_heads.2.reg_stem.1.act",
+      "kind": "silu",
+      "stage": "head2",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.030449999030679464,
+      "fp16_ms": 0.029499991796910763
+    },
+    {
+      "layer": "head2.scale_heads.2.cls_pred",
+      "kind": "conv 1x1",
+      "stage": "head2",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.08610001532360911,
+      "fp16_ms": 0.09419998968951404
+    },
+    {
+      "layer": "head2.scale_heads.2.obj_pred",
+      "kind": "conv 1x1",
+      "stage": "head2",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.0974999857135117,
+      "fp16_ms": 0.0953000271692872
+    },
+    {
+      "layer": "head2.scale_heads.2.reg_pred",
+      "kind": "conv 1x1",
+      "stage": "head2",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.08854997577145696,
+      "fp16_ms": 0.09004998719319701
+    },
+    {
+      "layer": "elan_p3_bu.cv1.conv",
+      "kind": "conv 1x1",
+      "stage": "pan",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.06910000229254365,
+      "fp16_ms": 0.22440002067014575
+    },
+    {
+      "layer": "elan_p3_bu.cv1.bn",
+      "kind": "batchnorm",
+      "stage": "pan",
+      "input_shape": [
+        1,
+        32,
+        80,
+        80
+      ],
+      "fp32_ms": 0.06790002225898206,
+      "fp16_ms": 0.08829997386783361
+    },
+    {
+      "layer": "elan_p3_bu.cv1.act",
+      "kind": "silu",
+      "stage": "pan",
+      "input_shape": [
+        1,
+        32,
+        80,
+        80
+      ],
+      "fp32_ms": 0.02885001595132053,
+      "fp16_ms": 0.02659996971487999
+    },
+    {
+      "layer": "elan_p3_bu.cv2.conv",
+      "kind": "conv 1x1",
+      "stage": "pan",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.06960000609979033,
+      "fp16_ms": 0.2242999617010355
+    },
+    {
+      "layer": "elan_p3_bu.cv2.bn",
+      "kind": "batchnorm",
+      "stage": "pan",
+      "input_shape": [
+        1,
+        32,
+        80,
+        80
+      ],
+      "fp32_ms": 0.06895000115036964,
+      "fp16_ms": 0.08820000221021473
+    },
+    {
+      "layer": "elan_p3_bu.cv2.act",
+      "kind": "silu",
+      "stage": "pan",
+      "input_shape": [
+        1,
+        32,
+        80,
+        80
+      ],
+      "fp32_ms": 0.030349998269230127,
+      "fp16_ms": 0.02640002639964223
+    },
+    {
+      "layer": "elan_p3_bu.blocks.0.conv",
+      "kind": "conv 3x3",
+      "stage": "pan",
+      "input_shape": [
+        1,
+        32,
+        80,
+        80
+      ],
+      "fp32_ms": 0.09960000170394778,
+      "fp16_ms": 0.3309499879833311
+    },
+    {
+      "layer": "elan_p3_bu.blocks.0.bn",
+      "kind": "batchnorm",
+      "stage": "pan",
+      "input_shape": [
+        1,
+        32,
+        80,
+        80
+      ],
+      "fp32_ms": 0.06920000305399299,
+      "fp16_ms": 0.0887999776750803
+    },
+    {
+      "layer": "elan_p3_bu.blocks.0.act",
+      "kind": "silu",
+      "stage": "pan",
+      "input_shape": [
+        1,
+        32,
+        80,
+        80
+      ],
+      "fp32_ms": 0.030499999411404133,
+      "fp16_ms": 0.02789997961372137
+    },
+    {
+      "layer": "elan_p3_bu.cv3.conv",
+      "kind": "conv 1x1",
+      "stage": "pan",
+      "input_shape": [
+        1,
+        96,
+        80,
+        80
+      ],
+      "fp32_ms": 0.10070001007989049,
+      "fp16_ms": 0.31065003713592887
+    },
+    {
+      "layer": "elan_p3_bu.cv3.bn",
+      "kind": "batchnorm",
+      "stage": "pan",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.07854998693801463,
+      "fp16_ms": 0.09029998909682035
+    },
+    {
+      "layer": "elan_p3_bu.cv3.act",
+      "kind": "silu",
+      "stage": "pan",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.039000005926936865,
+      "fp16_ms": 0.03130000550299883
+    },
+    {
+      "layer": "down_p3_bu.conv.conv",
+      "kind": "conv 3x3 stride 2",
+      "stage": "pan",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.15614996664226055,
+      "fp16_ms": 0.4230000195093453
+    },
+    {
+      "layer": "down_p3_bu.conv.bn",
+      "kind": "batchnorm",
+      "stage": "pan",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.06900000153109431,
+      "fp16_ms": 0.08820003131404519
+    },
+    {
+      "layer": "down_p3_bu.conv.act",
+      "kind": "silu",
+      "stage": "pan",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.030099996365606785,
+      "fp16_ms": 0.02609999501146376
+    },
+    {
+      "layer": "elan_p4_bu.cv1.conv",
+      "kind": "conv 1x1",
+      "stage": "pan",
+      "input_shape": [
+        1,
+        192,
+        40,
+        40
+      ],
+      "fp32_ms": 0.07444998482242227,
+      "fp16_ms": 0.18110001110471785
+    },
+    {
+      "layer": "elan_p4_bu.cv1.bn",
+      "kind": "batchnorm",
+      "stage": "pan",
+      "input_shape": [
+        1,
+        48,
+        40,
+        40
+      ],
+      "fp32_ms": 0.06990000838413835,
+      "fp16_ms": 0.09129999671131372
+    },
+    {
+      "layer": "elan_p4_bu.cv1.act",
+      "kind": "silu",
+      "stage": "pan",
+      "input_shape": [
+        1,
+        48,
+        40,
+        40
+      ],
+      "fp32_ms": 0.031100003980100155,
+      "fp16_ms": 0.0315000070258975
+    },
+    {
+      "layer": "elan_p4_bu.cv2.conv",
+      "kind": "conv 1x1",
+      "stage": "pan",
+      "input_shape": [
+        1,
+        192,
+        40,
+        40
+      ],
+      "fp32_ms": 0.07389998063445091,
+      "fp16_ms": 0.1821999903768301
+    },
+    {
+      "layer": "elan_p4_bu.cv2.bn",
+      "kind": "batchnorm",
+      "stage": "pan",
+      "input_shape": [
+        1,
+        48,
+        40,
+        40
+      ],
+      "fp32_ms": 0.06974997813813388,
+      "fp16_ms": 0.08965001325123012
+    },
+    {
+      "layer": "elan_p4_bu.cv2.act",
+      "kind": "silu",
+      "stage": "pan",
+      "input_shape": [
+        1,
+        48,
+        40,
+        40
+      ],
+      "fp32_ms": 0.03060000017285347,
+      "fp16_ms": 0.029600021662190557
+    },
+    {
+      "layer": "elan_p4_bu.blocks.0.conv",
+      "kind": "conv 3x3",
+      "stage": "pan",
+      "input_shape": [
+        1,
+        48,
+        40,
+        40
+      ],
+      "fp32_ms": 0.09680003859102726,
+      "fp16_ms": 0.5336500180419534
+    },
+    {
+      "layer": "elan_p4_bu.blocks.0.bn",
+      "kind": "batchnorm",
+      "stage": "pan",
+      "input_shape": [
+        1,
+        48,
+        40,
+        40
+      ],
+      "fp32_ms": 0.07040001219138503,
+      "fp16_ms": 0.08969998452812433
+    },
+    {
+      "layer": "elan_p4_bu.blocks.0.act",
+      "kind": "silu",
+      "stage": "pan",
+      "input_shape": [
+        1,
+        48,
+        40,
+        40
+      ],
+      "fp32_ms": 0.029849994461983442,
+      "fp16_ms": 0.02964999293908477
+    },
+    {
+      "layer": "elan_p4_bu.blocks.1.conv",
+      "kind": "conv 3x3",
+      "stage": "pan",
+      "input_shape": [
+        1,
+        48,
+        40,
+        40
+      ],
+      "fp32_ms": 0.09610000415705144,
+      "fp16_ms": 0.5333999870344996
+    },
+    {
+      "layer": "elan_p4_bu.blocks.1.bn",
+      "kind": "batchnorm",
+      "stage": "pan",
+      "input_shape": [
+        1,
+        48,
+        40,
+        40
+      ],
+      "fp32_ms": 0.07094998727552593,
+      "fp16_ms": 0.09049999061971903
+    },
+    {
+      "layer": "elan_p4_bu.blocks.1.act",
+      "kind": "silu",
+      "stage": "pan",
+      "input_shape": [
+        1,
+        48,
+        40,
+        40
+      ],
+      "fp32_ms": 0.03029999788850546,
+      "fp16_ms": 0.030449999030679464
+    },
+    {
+      "layer": "elan_p4_bu.cv3.conv",
+      "kind": "conv 1x1",
+      "stage": "pan",
+      "input_shape": [
+        1,
+        192,
+        40,
+        40
+      ],
+      "fp32_ms": 0.08685002103447914,
+      "fp16_ms": 0.3092499973718077
+    },
+    {
+      "layer": "elan_p4_bu.cv3.bn",
+      "kind": "batchnorm",
+      "stage": "pan",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.06940000457689166,
+      "fp16_ms": 0.0892000098247081
+    },
+    {
+      "layer": "elan_p4_bu.cv3.act",
+      "kind": "silu",
+      "stage": "pan",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.02880001557059586,
+      "fp16_ms": 0.03160000778734684
+    },
+    {
+      "layer": "down_p4_bu.conv.conv",
+      "kind": "conv 3x3 stride 2",
+      "stage": "pan",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.15594999422319233,
+      "fp16_ms": 0.3028499777428806
+    },
+    {
+      "layer": "down_p4_bu.conv.bn",
+      "kind": "batchnorm",
+      "stage": "pan",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.07119996007531881,
+      "fp16_ms": 0.09175000013783574
+    },
+    {
+      "layer": "down_p4_bu.conv.act",
+      "kind": "silu",
+      "stage": "pan",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.03160000778734684,
+      "fp16_ms": 0.03144997754134238
+    },
+    {
+      "layer": "elan_p5_bu.cv1.conv",
+      "kind": "conv 1x1",
+      "stage": "pan",
+      "input_shape": [
+        1,
+        256,
+        20,
+        20
+      ],
+      "fp32_ms": 0.06709998706355691,
+      "fp16_ms": 0.13725002645514905
+    },
+    {
+      "layer": "elan_p5_bu.cv1.bn",
+      "kind": "batchnorm",
+      "stage": "pan",
+      "input_shape": [
+        1,
+        64,
+        20,
+        20
+      ],
+      "fp32_ms": 0.06920000305399299,
+      "fp16_ms": 0.09099999442696571
+    },
+    {
+      "layer": "elan_p5_bu.cv1.act",
+      "kind": "silu",
+      "stage": "pan",
+      "input_shape": [
+        1,
+        64,
+        20,
+        20
+      ],
+      "fp32_ms": 0.031499977922067046,
+      "fp16_ms": 0.03194998134858906
+    },
+    {
+      "layer": "elan_p5_bu.cv2.conv",
+      "kind": "conv 1x1",
+      "stage": "pan",
+      "input_shape": [
+        1,
+        256,
+        20,
+        20
+      ],
+      "fp32_ms": 0.06680001388303936,
+      "fp16_ms": 0.13844997738488019
+    },
+    {
+      "layer": "elan_p5_bu.cv2.bn",
+      "kind": "batchnorm",
+      "stage": "pan",
+      "input_shape": [
+        1,
+        64,
+        20,
+        20
+      ],
+      "fp32_ms": 0.07094998727552593,
+      "fp16_ms": 0.09119999594986439
+    },
+    {
+      "layer": "elan_p5_bu.cv2.act",
+      "kind": "silu",
+      "stage": "pan",
+      "input_shape": [
+        1,
+        64,
+        20,
+        20
+      ],
+      "fp32_ms": 0.03155000740662217,
+      "fp16_ms": 0.031000003218650818
+    },
+    {
+      "layer": "elan_p5_bu.blocks.0.conv",
+      "kind": "conv 3x3",
+      "stage": "pan",
+      "input_shape": [
+        1,
+        64,
+        20,
+        20
+      ],
+      "fp32_ms": 0.07360003655776381,
+      "fp16_ms": 0.18724999972619116
+    },
+    {
+      "layer": "elan_p5_bu.blocks.0.bn",
+      "kind": "batchnorm",
+      "stage": "pan",
+      "input_shape": [
+        1,
+        64,
+        20,
+        20
+      ],
+      "fp32_ms": 0.07120001828297973,
+      "fp16_ms": 0.09119999594986439
+    },
+    {
+      "layer": "elan_p5_bu.blocks.0.act",
+      "kind": "silu",
+      "stage": "pan",
+      "input_shape": [
+        1,
+        64,
+        20,
+        20
+      ],
+      "fp32_ms": 0.0315000070258975,
+      "fp16_ms": 0.03524997737258673
+    },
+    {
+      "layer": "elan_p5_bu.blocks.1.conv",
+      "kind": "conv 3x3",
+      "stage": "pan",
+      "input_shape": [
+        1,
+        64,
+        20,
+        20
+      ],
+      "fp32_ms": 0.1271500368602574,
+      "fp16_ms": 0.18694999744184315
+    },
+    {
+      "layer": "elan_p5_bu.blocks.1.bn",
+      "kind": "batchnorm",
+      "stage": "pan",
+      "input_shape": [
+        1,
+        64,
+        20,
+        20
+      ],
+      "fp32_ms": 0.06905000191181898,
+      "fp16_ms": 0.09009998757392168
+    },
+    {
+      "layer": "elan_p5_bu.blocks.1.act",
+      "kind": "silu",
+      "stage": "pan",
+      "input_shape": [
+        1,
+        64,
+        20,
+        20
+      ],
+      "fp32_ms": 0.0315000070258975,
+      "fp16_ms": 0.030750001315027475
+    },
+    {
+      "layer": "elan_p5_bu.cv3.conv",
+      "kind": "conv 1x1",
+      "stage": "pan",
+      "input_shape": [
+        1,
+        256,
+        20,
+        20
+      ],
+      "fp32_ms": 0.07234999793581665,
+      "fp16_ms": 0.13830000534653664
+    },
+    {
+      "layer": "elan_p5_bu.cv3.bn",
+      "kind": "batchnorm",
+      "stage": "pan",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.06834999658167362,
+      "fp16_ms": 0.10559998918324709
+    },
+    {
+      "layer": "elan_p5_bu.cv3.act",
+      "kind": "silu",
+      "stage": "pan",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.031150004360824823,
+      "fp16_ms": 0.030399998649954796
+    },
+    {
+      "layer": "head3.scale_heads.0.cls_stem.0.conv",
+      "kind": "conv 3x3",
+      "stage": "head3",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.20645000040531158,
+      "fp16_ms": 1.0183499834965914
+    },
+    {
+      "layer": "head3.scale_heads.0.cls_stem.0.bn",
+      "kind": "batchnorm",
+      "stage": "head3",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.07720000576227903,
+      "fp16_ms": 0.09139999747276306
+    },
+    {
+      "layer": "head3.scale_heads.0.cls_stem.0.act",
+      "kind": "silu",
+      "stage": "head3",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.03979995381087065,
+      "fp16_ms": 0.032100011594593525
+    },
+    {
+      "layer": "head3.scale_heads.0.cls_stem.1.conv",
+      "kind": "conv 3x3",
+      "stage": "head3",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.19210000755265355,
+      "fp16_ms": 1.000649994239211
+    },
+    {
+      "layer": "head3.scale_heads.0.cls_stem.1.bn",
+      "kind": "batchnorm",
+      "stage": "head3",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.08185001206584275,
+      "fp16_ms": 0.09180000051856041
+    },
+    {
+      "layer": "head3.scale_heads.0.cls_stem.1.act",
+      "kind": "silu",
+      "stage": "head3",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.044199987314641476,
+      "fp16_ms": 0.03689998993650079
+    },
+    {
+      "layer": "head3.scale_heads.0.reg_stem.0.conv",
+      "kind": "conv 3x3",
+      "stage": "head3",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.19435002468526363,
+      "fp16_ms": 0.9967499936465174
+    },
+    {
+      "layer": "head3.scale_heads.0.reg_stem.0.bn",
+      "kind": "batchnorm",
+      "stage": "head3",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.07880001794546843,
+      "fp16_ms": 0.09180000051856041
+    },
+    {
+      "layer": "head3.scale_heads.0.reg_stem.0.act",
+      "kind": "silu",
+      "stage": "head3",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.04089999129064381,
+      "fp16_ms": 0.032800016924738884
+    },
+    {
+      "layer": "head3.scale_heads.0.reg_stem.1.conv",
+      "kind": "conv 3x3",
+      "stage": "head3",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.19444999634288251,
+      "fp16_ms": 0.9996999870054424
+    },
+    {
+      "layer": "head3.scale_heads.0.reg_stem.1.bn",
+      "kind": "batchnorm",
+      "stage": "head3",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.07884998922236264,
+      "fp16_ms": 0.09249997674487531
+    },
+    {
+      "layer": "head3.scale_heads.0.reg_stem.1.act",
+      "kind": "silu",
+      "stage": "head3",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.040300015825778246,
+      "fp16_ms": 0.032450014259666204
+    },
+    {
+      "layer": "head3.scale_heads.0.cls_pred",
+      "kind": "conv 1x1",
+      "stage": "head3",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.08955001248978078,
+      "fp16_ms": 0.24300001678057015
+    },
+    {
+      "layer": "head3.scale_heads.0.obj_pred",
+      "kind": "conv 1x1",
+      "stage": "head3",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.09044999023899436,
+      "fp16_ms": 0.08835000335238874
+    },
+    {
+      "layer": "head3.scale_heads.0.reg_pred",
+      "kind": "conv 1x1",
+      "stage": "head3",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.08849997539073229,
+      "fp16_ms": 0.23199996212497354
+    },
+    {
+      "layer": "head3.scale_heads.1.cls_stem.0.conv",
+      "kind": "conv 3x3",
+      "stage": "head3",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.15159999020397663,
+      "fp16_ms": 0.587650021770969
+    },
+    {
+      "layer": "head3.scale_heads.1.cls_stem.0.bn",
+      "kind": "batchnorm",
+      "stage": "head3",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.06940000457689166,
+      "fp16_ms": 0.08895000792108476
+    },
+    {
+      "layer": "head3.scale_heads.1.cls_stem.0.act",
+      "kind": "silu",
+      "stage": "head3",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.040399987483397126,
+      "fp16_ms": 0.02794997999444604
+    },
+    {
+      "layer": "head3.scale_heads.1.cls_stem.1.conv",
+      "kind": "conv 3x3",
+      "stage": "head3",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.15165001968853176,
+      "fp16_ms": 0.5870999884791672
+    },
+    {
+      "layer": "head3.scale_heads.1.cls_stem.1.bn",
+      "kind": "batchnorm",
+      "stage": "head3",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.06955000571906567,
+      "fp16_ms": 0.08889997843652964
+    },
+    {
+      "layer": "head3.scale_heads.1.cls_stem.1.act",
+      "kind": "silu",
+      "stage": "head3",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.031400006264448166,
+      "fp16_ms": 0.026599998818710446
+    },
+    {
+      "layer": "head3.scale_heads.1.reg_stem.0.conv",
+      "kind": "conv 3x3",
+      "stage": "head3",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.15335000352934003,
+      "fp16_ms": 0.5868500156793743
+    },
+    {
+      "layer": "head3.scale_heads.1.reg_stem.0.bn",
+      "kind": "batchnorm",
+      "stage": "head3",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.06949997623451054,
+      "fp16_ms": 0.08914998034015298
+    },
+    {
+      "layer": "head3.scale_heads.1.reg_stem.0.act",
+      "kind": "silu",
+      "stage": "head3",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.03024999750778079,
+      "fp16_ms": 0.02614999539218843
+    },
+    {
+      "layer": "head3.scale_heads.1.reg_stem.1.conv",
+      "kind": "conv 3x3",
+      "stage": "head3",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.1534000039100647,
+      "fp16_ms": 0.5870999884791672
+    },
+    {
+      "layer": "head3.scale_heads.1.reg_stem.1.bn",
+      "kind": "batchnorm",
+      "stage": "head3",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.06970000686123967,
+      "fp16_ms": 0.08980001439340413
+    },
+    {
+      "layer": "head3.scale_heads.1.reg_stem.1.act",
+      "kind": "silu",
+      "stage": "head3",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.030449999030679464,
+      "fp16_ms": 0.026399968191981316
+    },
+    {
+      "layer": "head3.scale_heads.1.cls_pred",
+      "kind": "conv 1x1",
+      "stage": "head3",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.08749996777623892,
+      "fp16_ms": 0.1257499970961362
+    },
+    {
+      "layer": "head3.scale_heads.1.obj_pred",
+      "kind": "conv 1x1",
+      "stage": "head3",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.09374998626299202,
+      "fp16_ms": 0.09459999273531139
+    },
+    {
+      "layer": "head3.scale_heads.1.reg_pred",
+      "kind": "conv 1x1",
+      "stage": "head3",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.08659996092319489,
+      "fp16_ms": 0.12615000014193356
+    },
+    {
+      "layer": "head3.scale_heads.2.cls_stem.0.conv",
+      "kind": "conv 3x3",
+      "stage": "head3",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.12164999498054385,
+      "fp16_ms": 0.30610000248998404
+    },
+    {
+      "layer": "head3.scale_heads.2.cls_stem.0.bn",
+      "kind": "batchnorm",
+      "stage": "head3",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.07169999298639596,
+      "fp16_ms": 0.09175000013783574
+    },
+    {
+      "layer": "head3.scale_heads.2.cls_stem.0.act",
+      "kind": "silu",
+      "stage": "head3",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.0315000070258975,
+      "fp16_ms": 0.031149975256994367
+    },
+    {
+      "layer": "head3.scale_heads.2.cls_stem.1.conv",
+      "kind": "conv 3x3",
+      "stage": "head3",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.12159999459981918,
+      "fp16_ms": 0.3733999910764396
+    },
+    {
+      "layer": "head3.scale_heads.2.cls_stem.1.bn",
+      "kind": "batchnorm",
+      "stage": "head3",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.08840000373311341,
+      "fp16_ms": 0.11415002518333495
+    },
+    {
+      "layer": "head3.scale_heads.2.cls_stem.1.act",
+      "kind": "silu",
+      "stage": "head3",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.04775001434609294,
+      "fp16_ms": 0.04689997876994312
+    },
+    {
+      "layer": "head3.scale_heads.2.reg_stem.0.conv",
+      "kind": "conv 3x3",
+      "stage": "head3",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.13800000306218863,
+      "fp16_ms": 0.30365001293830574
+    },
+    {
+      "layer": "head3.scale_heads.2.reg_stem.0.bn",
+      "kind": "batchnorm",
+      "stage": "head3",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.07050001295283437,
+      "fp16_ms": 0.09114999556913972
+    },
+    {
+      "layer": "head3.scale_heads.2.reg_stem.0.act",
+      "kind": "silu",
+      "stage": "head3",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.031100003980100155,
+      "fp16_ms": 0.03190001007169485
+    },
+    {
+      "layer": "head3.scale_heads.2.reg_stem.1.conv",
+      "kind": "conv 3x3",
+      "stage": "head3",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.12175002484582365,
+      "fp16_ms": 0.3032500098925084
+    },
+    {
+      "layer": "head3.scale_heads.2.reg_stem.1.bn",
+      "kind": "batchnorm",
+      "stage": "head3",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.0711499887984246,
+      "fp16_ms": 0.09144999785348773
+    },
+    {
+      "layer": "head3.scale_heads.2.reg_stem.1.act",
+      "kind": "silu",
+      "stage": "head3",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.03190001007169485,
+      "fp16_ms": 0.030750001315027475
+    },
+    {
+      "layer": "head3.scale_heads.2.cls_pred",
+      "kind": "conv 1x1",
+      "stage": "head3",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.08840003283694386,
+      "fp16_ms": 0.09190000128000975
+    },
+    {
+      "layer": "head3.scale_heads.2.obj_pred",
+      "kind": "conv 1x1",
+      "stage": "head3",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.09914999827742577,
+      "fp16_ms": 0.0968000094871968
+    },
+    {
+      "layer": "head3.scale_heads.2.reg_pred",
+      "kind": "conv 1x1",
+      "stage": "head3",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.08725002408027649,
+      "fp16_ms": 0.09099999442696571
+    },
+    {
+      "layer": "elan_p3_final.cv1.conv",
+      "kind": "conv 1x1",
+      "stage": "refine",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.06890000076964498,
+      "fp16_ms": 0.2240000176243484
+    },
+    {
+      "layer": "elan_p3_final.cv1.bn",
+      "kind": "batchnorm",
+      "stage": "refine",
+      "input_shape": [
+        1,
+        32,
+        80,
+        80
+      ],
+      "fp32_ms": 0.07039995398372412,
+      "fp16_ms": 0.09144999785348773
+    },
+    {
+      "layer": "elan_p3_final.cv1.act",
+      "kind": "silu",
+      "stage": "refine",
+      "input_shape": [
+        1,
+        32,
+        80,
+        80
+      ],
+      "fp32_ms": 0.03130000550299883,
+      "fp16_ms": 0.027300033252686262
+    },
+    {
+      "layer": "elan_p3_final.cv2.conv",
+      "kind": "conv 1x1",
+      "stage": "refine",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.0722000258974731,
+      "fp16_ms": 0.23304997012019157
+    },
+    {
+      "layer": "elan_p3_final.cv2.bn",
+      "kind": "batchnorm",
+      "stage": "refine",
+      "input_shape": [
+        1,
+        32,
+        80,
+        80
+      ],
+      "fp32_ms": 0.07109998841769993,
+      "fp16_ms": 0.08999998681247234
+    },
+    {
+      "layer": "elan_p3_final.cv2.act",
+      "kind": "silu",
+      "stage": "refine",
+      "input_shape": [
+        1,
+        32,
+        80,
+        80
+      ],
+      "fp32_ms": 0.06669998401775956,
+      "fp16_ms": 0.049700000090524554
+    },
+    {
+      "layer": "elan_p3_final.blocks.0.conv",
+      "kind": "conv 3x3",
+      "stage": "refine",
+      "input_shape": [
+        1,
+        32,
+        80,
+        80
+      ],
+      "fp32_ms": 0.1024999946821481,
+      "fp16_ms": 0.33340000663883984
+    },
+    {
+      "layer": "elan_p3_final.blocks.0.bn",
+      "kind": "batchnorm",
+      "stage": "refine",
+      "input_shape": [
+        1,
+        32,
+        80,
+        80
+      ],
+      "fp32_ms": 0.07085001561790705,
+      "fp16_ms": 0.0905499910004437
+    },
+    {
+      "layer": "elan_p3_final.blocks.0.act",
+      "kind": "silu",
+      "stage": "refine",
+      "input_shape": [
+        1,
+        32,
+        80,
+        80
+      ],
+      "fp32_ms": 0.029099988751113415,
+      "fp16_ms": 0.0274000340141356
+    },
+    {
+      "layer": "elan_p3_final.cv3.conv",
+      "kind": "conv 1x1",
+      "stage": "refine",
+      "input_shape": [
+        1,
+        96,
+        80,
+        80
+      ],
+      "fp32_ms": 0.10054997983388603,
+      "fp16_ms": 0.31215001945383847
+    },
+    {
+      "layer": "elan_p3_final.cv3.bn",
+      "kind": "batchnorm",
+      "stage": "refine",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.09534999844618142,
+      "fp16_ms": 0.0923499756027013
+    },
+    {
+      "layer": "elan_p3_final.cv3.act",
+      "kind": "silu",
+      "stage": "refine",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.04020001506432891,
+      "fp16_ms": 0.03200001083314419
+    },
+    {
+      "layer": "elan_p4_final.cv1.conv",
+      "kind": "conv 1x1",
+      "stage": "refine",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.06650001159869134,
+      "fp16_ms": 0.11764999362640083
+    },
+    {
+      "layer": "elan_p4_final.cv1.bn",
+      "kind": "batchnorm",
+      "stage": "refine",
+      "input_shape": [
+        1,
+        48,
+        40,
+        40
+      ],
+      "fp32_ms": 0.07005000952631235,
+      "fp16_ms": 0.0908000220078975
+    },
+    {
+      "layer": "elan_p4_final.cv1.act",
+      "kind": "silu",
+      "stage": "refine",
+      "input_shape": [
+        1,
+        48,
+        40,
+        40
+      ],
+      "fp32_ms": 0.03095000283792615,
+      "fp16_ms": 0.03684998955577612
+    },
+    {
+      "layer": "elan_p4_final.cv2.conv",
+      "kind": "conv 1x1",
+      "stage": "refine",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.06700001540593803,
+      "fp16_ms": 0.11760002234950662
+    },
+    {
+      "layer": "elan_p4_final.cv2.bn",
+      "kind": "batchnorm",
+      "stage": "refine",
+      "input_shape": [
+        1,
+        48,
+        40,
+        40
+      ],
+      "fp32_ms": 0.07064998499117792,
+      "fp16_ms": 0.09154999861493707
+    },
+    {
+      "layer": "elan_p4_final.cv2.act",
+      "kind": "silu",
+      "stage": "refine",
+      "input_shape": [
+        1,
+        48,
+        40,
+        40
+      ],
+      "fp32_ms": 0.030850002076476812,
+      "fp16_ms": 0.029650022042915225
+    },
+    {
+      "layer": "elan_p4_final.blocks.0.conv",
+      "kind": "conv 3x3",
+      "stage": "refine",
+      "input_shape": [
+        1,
+        48,
+        40,
+        40
+      ],
+      "fp32_ms": 0.09660000796429813,
+      "fp16_ms": 0.5355000030249357
+    },
+    {
+      "layer": "elan_p4_final.blocks.0.bn",
+      "kind": "batchnorm",
+      "stage": "refine",
+      "input_shape": [
+        1,
+        48,
+        40,
+        40
+      ],
+      "fp32_ms": 0.07079998613335192,
+      "fp16_ms": 0.09144999785348773
+    },
+    {
+      "layer": "elan_p4_final.blocks.0.act",
+      "kind": "silu",
+      "stage": "refine",
+      "input_shape": [
+        1,
+        48,
+        40,
+        40
+      ],
+      "fp32_ms": 0.032450014259666204,
+      "fp16_ms": 0.0315000070258975
+    },
+    {
+      "layer": "elan_p4_final.cv3.conv",
+      "kind": "conv 1x1",
+      "stage": "refine",
+      "input_shape": [
+        1,
+        144,
+        40,
+        40
+      ],
+      "fp32_ms": 0.0788999896030873,
+      "fp16_ms": 0.26795000303536654
+    },
+    {
+      "layer": "elan_p4_final.cv3.bn",
+      "kind": "batchnorm",
+      "stage": "refine",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.07115001790225506,
+      "fp16_ms": 0.09210000280290842
+    },
+    {
+      "layer": "elan_p4_final.cv3.act",
+      "kind": "silu",
+      "stage": "refine",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.034850003430619836,
+      "fp16_ms": 0.08114997763186693
+    },
+    {
+      "layer": "elan_p5_final.cv1.conv",
+      "kind": "conv 1x1",
+      "stage": "refine",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.06955000571906567,
+      "fp16_ms": 0.09579997276887298
+    },
+    {
+      "layer": "elan_p5_final.cv1.bn",
+      "kind": "batchnorm",
+      "stage": "refine",
+      "input_shape": [
+        1,
+        64,
+        20,
+        20
+      ],
+      "fp32_ms": 0.07145002018660307,
+      "fp16_ms": 0.09180000051856041
+    },
+    {
+      "layer": "elan_p5_final.cv1.act",
+      "kind": "silu",
+      "stage": "refine",
+      "input_shape": [
+        1,
+        64,
+        20,
+        20
+      ],
+      "fp32_ms": 0.0305499997921288,
+      "fp16_ms": 0.030199997127056122
+    },
+    {
+      "layer": "elan_p5_final.cv2.conv",
+      "kind": "conv 1x1",
+      "stage": "refine",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.0669499859213829,
+      "fp16_ms": 0.09540002793073654
+    },
+    {
+      "layer": "elan_p5_final.cv2.bn",
+      "kind": "batchnorm",
+      "stage": "refine",
+      "input_shape": [
+        1,
+        64,
+        20,
+        20
+      ],
+      "fp32_ms": 0.06930000381544232,
+      "fp16_ms": 0.09019998833537102
+    },
+    {
+      "layer": "elan_p5_final.cv2.act",
+      "kind": "silu",
+      "stage": "refine",
+      "input_shape": [
+        1,
+        64,
+        20,
+        20
+      ],
+      "fp32_ms": 0.031100003980100155,
+      "fp16_ms": 0.03015002585016191
+    },
+    {
+      "layer": "elan_p5_final.blocks.0.conv",
+      "kind": "conv 3x3",
+      "stage": "refine",
+      "input_shape": [
+        1,
+        64,
+        20,
+        20
+      ],
+      "fp32_ms": 0.07360000745393336,
+      "fp16_ms": 0.18730000010691583
+    },
+    {
+      "layer": "elan_p5_final.blocks.0.bn",
+      "kind": "batchnorm",
+      "stage": "refine",
+      "input_shape": [
+        1,
+        64,
+        20,
+        20
+      ],
+      "fp32_ms": 0.07194996578618884,
+      "fp16_ms": 0.09210000280290842
+    },
+    {
+      "layer": "elan_p5_final.blocks.0.act",
+      "kind": "silu",
+      "stage": "refine",
+      "input_shape": [
+        1,
+        64,
+        20,
+        20
+      ],
+      "fp32_ms": 0.031400006264448166,
+      "fp16_ms": 0.03065000055357814
+    },
+    {
+      "layer": "elan_p5_final.cv3.conv",
+      "kind": "conv 1x1",
+      "stage": "refine",
+      "input_shape": [
+        1,
+        192,
+        20,
+        20
+      ],
+      "fp32_ms": 0.06969997775740921,
+      "fp16_ms": 0.11880003148689866
+    },
+    {
+      "layer": "elan_p5_final.cv3.bn",
+      "kind": "batchnorm",
+      "stage": "refine",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.07059998461045325,
+      "fp16_ms": 0.0914999982342124
+    },
+    {
+      "layer": "elan_p5_final.cv3.act",
+      "kind": "silu",
+      "stage": "refine",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.06655001197941601,
+      "fp16_ms": 0.06640001083724201
+    },
+    {
+      "layer": "head_final.scale_heads.0.cls_stem.0.conv",
+      "kind": "conv 3x3",
+      "stage": "head_final",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.19605003762990236,
+      "fp16_ms": 1.034050015732646
+    },
+    {
+      "layer": "head_final.scale_heads.0.cls_stem.0.bn",
+      "kind": "batchnorm",
+      "stage": "head_final",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.1134999911300838,
+      "fp16_ms": 0.09089999366551638
+    },
+    {
+      "layer": "head_final.scale_heads.0.cls_stem.0.act",
+      "kind": "silu",
+      "stage": "head_final",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.07690000347793102,
+      "fp16_ms": 0.06594997830688953
+    },
+    {
+      "layer": "head_final.scale_heads.0.cls_stem.1.conv",
+      "kind": "conv 3x3",
+      "stage": "head_final",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.21015002857893705,
+      "fp16_ms": 0.999599986243993
+    },
+    {
+      "layer": "head_final.scale_heads.0.cls_stem.1.bn",
+      "kind": "batchnorm",
+      "stage": "head_final",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.07920002099126577,
+      "fp16_ms": 0.09264994878321886
+    },
+    {
+      "layer": "head_final.scale_heads.0.cls_stem.1.act",
+      "kind": "silu",
+      "stage": "head_final",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.04049998824484646,
+      "fp16_ms": 0.03304998972453177
+    },
+    {
+      "layer": "head_final.scale_heads.0.reg_stem.0.conv",
+      "kind": "conv 3x3",
+      "stage": "head_final",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.19610000890679657,
+      "fp16_ms": 1.0162999969907105
+    },
+    {
+      "layer": "head_final.scale_heads.0.reg_stem.0.bn",
+      "kind": "batchnorm",
+      "stage": "head_final",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.09374998626299202,
+      "fp16_ms": 0.09119999594986439
+    },
+    {
+      "layer": "head_final.scale_heads.0.reg_stem.0.act",
+      "kind": "silu",
+      "stage": "head_final",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.039700011257082224,
+      "fp16_ms": 0.031549978302791715
+    },
+    {
+      "layer": "head_final.scale_heads.0.reg_stem.1.conv",
+      "kind": "conv 3x3",
+      "stage": "head_final",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.1934999891091138,
+      "fp16_ms": 1.0017500026151538
+    },
+    {
+      "layer": "head_final.scale_heads.0.reg_stem.1.bn",
+      "kind": "batchnorm",
+      "stage": "head_final",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.07955002365633845,
+      "fp16_ms": 0.09200000204145908
+    },
+    {
+      "layer": "head_final.scale_heads.0.reg_stem.1.act",
+      "kind": "silu",
+      "stage": "head_final",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.039700011257082224,
+      "fp16_ms": 0.03219995414838195
+    },
+    {
+      "layer": "head_final.scale_heads.0.cls_pred",
+      "kind": "conv 1x1",
+      "stage": "head_final",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.09040001896210015,
+      "fp16_ms": 0.2300000051036477
+    },
+    {
+      "layer": "head_final.scale_heads.0.obj_pred",
+      "kind": "conv 1x1",
+      "stage": "head_final",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.09089999366551638,
+      "fp16_ms": 0.08855000487528741
+    },
+    {
+      "layer": "head_final.scale_heads.0.reg_pred",
+      "kind": "conv 1x1",
+      "stage": "head_final",
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "fp32_ms": 0.08860000525601208,
+      "fp16_ms": 0.2466999867465347
+    },
+    {
+      "layer": "head_final.scale_heads.1.cls_stem.0.conv",
+      "kind": "conv 3x3",
+      "stage": "head_final",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.15395000809803605,
+      "fp16_ms": 0.5952499923296273
+    },
+    {
+      "layer": "head_final.scale_heads.1.cls_stem.0.bn",
+      "kind": "batchnorm",
+      "stage": "head_final",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.07010000990703702,
+      "fp16_ms": 0.09064999176189303
+    },
+    {
+      "layer": "head_final.scale_heads.1.cls_stem.0.act",
+      "kind": "silu",
+      "stage": "head_final",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.030750001315027475,
+      "fp16_ms": 0.03359999391250312
+    },
+    {
+      "layer": "head_final.scale_heads.1.cls_stem.1.conv",
+      "kind": "conv 3x3",
+      "stage": "head_final",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.1532500027678907,
+      "fp16_ms": 0.6185499951243401
+    },
+    {
+      "layer": "head_final.scale_heads.1.cls_stem.1.bn",
+      "kind": "batchnorm",
+      "stage": "head_final",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.08850000449456275,
+      "fp16_ms": 0.11515000369399786
+    },
+    {
+      "layer": "head_final.scale_heads.1.cls_stem.1.act",
+      "kind": "silu",
+      "stage": "head_final",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.047250010538846254,
+      "fp16_ms": 0.04714998067356646
+    },
+    {
+      "layer": "head_final.scale_heads.1.reg_stem.0.conv",
+      "kind": "conv 3x3",
+      "stage": "head_final",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.1540500088594854,
+      "fp16_ms": 0.593700009630993
+    },
+    {
+      "layer": "head_final.scale_heads.1.reg_stem.0.bn",
+      "kind": "batchnorm",
+      "stage": "head_final",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.07165002170950174,
+      "fp16_ms": 0.09119999594986439
+    },
+    {
+      "layer": "head_final.scale_heads.1.reg_stem.0.act",
+      "kind": "silu",
+      "stage": "head_final",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.03179998020641506,
+      "fp16_ms": 0.03029999788850546
+    },
+    {
+      "layer": "head_final.scale_heads.1.reg_stem.1.conv",
+      "kind": "conv 3x3",
+      "stage": "head_final",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.15335000352934003,
+      "fp16_ms": 0.5902999546378851
+    },
+    {
+      "layer": "head_final.scale_heads.1.reg_stem.1.bn",
+      "kind": "batchnorm",
+      "stage": "head_final",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.07115001790225506,
+      "fp16_ms": 0.09154999861493707
+    },
+    {
+      "layer": "head_final.scale_heads.1.reg_stem.1.act",
+      "kind": "silu",
+      "stage": "head_final",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.029650022042915225,
+      "fp16_ms": 0.026600027922540903
+    },
+    {
+      "layer": "head_final.scale_heads.1.cls_pred",
+      "kind": "conv 1x1",
+      "stage": "head_final",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.08949998300522566,
+      "fp16_ms": 0.12670003343373537
+    },
+    {
+      "layer": "head_final.scale_heads.1.obj_pred",
+      "kind": "conv 1x1",
+      "stage": "head_final",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.09625000529922545,
+      "fp16_ms": 0.09650000720284879
+    },
+    {
+      "layer": "head_final.scale_heads.1.reg_pred",
+      "kind": "conv 1x1",
+      "stage": "head_final",
+      "input_shape": [
+        1,
+        96,
+        40,
+        40
+      ],
+      "fp32_ms": 0.08810003055259585,
+      "fp16_ms": 0.12630003038793802
+    },
+    {
+      "layer": "head_final.scale_heads.2.cls_stem.0.conv",
+      "kind": "conv 3x3",
+      "stage": "head_final",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.1221999991685152,
+      "fp16_ms": 0.30449999030679464
+    },
+    {
+      "layer": "head_final.scale_heads.2.cls_stem.0.bn",
+      "kind": "batchnorm",
+      "stage": "head_final",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.07075001485645771,
+      "fp16_ms": 0.09024998871609569
+    },
+    {
+      "layer": "head_final.scale_heads.2.cls_stem.0.act",
+      "kind": "silu",
+      "stage": "head_final",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.03090000245720148,
+      "fp16_ms": 0.031200004741549492
+    },
+    {
+      "layer": "head_final.scale_heads.2.cls_stem.1.conv",
+      "kind": "conv 3x3",
+      "stage": "head_final",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.1210999907925725,
+      "fp16_ms": 0.30490002245642245
+    },
+    {
+      "layer": "head_final.scale_heads.2.cls_stem.1.bn",
+      "kind": "batchnorm",
+      "stage": "head_final",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.10885001393035054,
+      "fp16_ms": 0.19255001097917557
+    },
+    {
+      "layer": "head_final.scale_heads.2.cls_stem.1.act",
+      "kind": "silu",
+      "stage": "head_final",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.047600013203918934,
+      "fp16_ms": 0.048200017772614956
+    },
+    {
+      "layer": "head_final.scale_heads.2.reg_stem.0.conv",
+      "kind": "conv 3x3",
+      "stage": "head_final",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.15330000314861536,
+      "fp16_ms": 0.3738500236067921
+    },
+    {
+      "layer": "head_final.scale_heads.2.reg_stem.0.bn",
+      "kind": "batchnorm",
+      "stage": "head_final",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.10679999832063913,
+      "fp16_ms": 0.19350001821294427
+    },
+    {
+      "layer": "head_final.scale_heads.2.reg_stem.0.act",
+      "kind": "silu",
+      "stage": "head_final",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.028900016332045197,
+      "fp16_ms": 0.02735003363341093
+    },
+    {
+      "layer": "head_final.scale_heads.2.reg_stem.1.conv",
+      "kind": "conv 3x3",
+      "stage": "head_final",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.1212499919347465,
+      "fp16_ms": 0.3039000148419291
+    },
+    {
+      "layer": "head_final.scale_heads.2.reg_stem.1.bn",
+      "kind": "batchnorm",
+      "stage": "head_final",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.06969997775740921,
+      "fp16_ms": 0.09419996058568358
+    },
+    {
+      "layer": "head_final.scale_heads.2.reg_stem.1.act",
+      "kind": "silu",
+      "stage": "head_final",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.029999995604157448,
+      "fp16_ms": 0.030199997127056122
+    },
+    {
+      "layer": "head_final.scale_heads.2.cls_pred",
+      "kind": "conv 1x1",
+      "stage": "head_final",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.0872999953571707,
+      "fp16_ms": 0.09004998719319701
+    },
+    {
+      "layer": "head_final.scale_heads.2.obj_pred",
+      "kind": "conv 1x1",
+      "stage": "head_final",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.09710004087537527,
+      "fp16_ms": 0.09569997200742364
+    },
+    {
+      "layer": "head_final.scale_heads.2.reg_pred",
+      "kind": "conv 1x1",
+      "stage": "head_final",
+      "input_shape": [
+        1,
+        128,
+        20,
+        20
+      ],
+      "fp32_ms": 0.0889000075403601,
+      "fp16_ms": 0.08999998681247234
+    }
+  ]
+}

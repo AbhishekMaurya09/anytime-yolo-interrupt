@@ -1,0 +1,45 @@
+{
+  "_about": "Results that were measured in one-off evaluations and are not stored in the run folders. Used by docs/make_result_charts.py. Everything else the charts show is read from runs/ and docs/accelerator_workload.csv.",
+
+  "accuracy_by_run": {
+    "_source": "Final head, mAP50 at confidence >= 0.001 on the 40 test images of the first 200-image subset, which no run trained on. Measured 2026-09-28 to 2026-10-02.",
+    "runs": [
+      {"name": "train2", "training_images": "120 images", "change": "fixed loss", "map50": 0.011},
+      {"name": "train4", "training_images": "120 images", "change": "+ augmentation", "map50": 0.033},
+      {"name": "train5", "training_images": "1,200 images", "change": "10x more data", "map50": 0.122},
+      {"name": "train6", "training_images": "65,000 images", "change": "54x more data", "map50": 0.355}
+    ]
+  },
+
+  "train6_per_head": {
+    "_source": "train6_bdd70k/last.pt on the 1,500-image test split of bdd70k, measured 2026-10-02. Precision and recall at confidence >= 0.5.",
+    "heads": ["Head 1", "Head 2", "Head 3", "Final"],
+    "map50": [0.212, 0.280, 0.299, 0.299],
+    "map50_95": [0.105, 0.141, 0.152, 0.152],
+    "precision": [0.621, 0.680, 0.690, 0.695],
+    "recall": [0.435, 0.516, 0.526, 0.528]
+  },
+
+  "train6_per_class": {
+    "_source": "train6_bdd70k/last.pt, final head, AP50 on the same 1,500 test images. Training boxes are the counts in the 65,000-image training split.",
+    "classes": [
+      {"name": "car", "ap50": 0.656, "training_boxes": 651562},
+      {"name": "traffic sign", "ap50": 0.446, "training_boxes": 221598},
+      {"name": "traffic light", "ap50": 0.408, "training_boxes": 174708},
+      {"name": "pedestrian", "ap50": 0.400, "training_boxes": 85740},
+      {"name": "truck", "ap50": 0.378, "training_boxes": 25924},
+      {"name": "bus", "ap50": 0.326, "training_boxes": 11122},
+      {"name": "bicycle", "ap50": 0.178, "training_boxes": 6589},
+      {"name": "rider", "ap50": 0.102, "training_boxes": 4268},
+      {"name": "motorcycle", "ap50": 0.093, "training_boxes": 2798},
+      {"name": "train", "ap50": 0.000, "training_boxes": 118}
+    ]
+  },
+
+  "postprocess_speedup": {
+    "_source": "Median time until each head's answer is ready, same model (train2) and same 40 images, GTX 1650, measured 2026-09-28 before and after post-processing was rewritten. Per head, post-processing went from about 13.6 ms to about 2.9 ms.",
+    "heads": ["Head 1", "Head 2", "Head 3", "Final"],
+    "before_ms": [28.3, 45.2, 63.9, 79.2],
+    "after_ms": [18.8, 27.5, 35.3, 40.9]
+  }
+}
