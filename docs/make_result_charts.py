@@ -23,6 +23,7 @@ from matplotlib.path import Path
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 OUT = os.path.join(HERE, "results")
+STUDY = os.path.join(HERE, "parameter_study")   # the three-inputs / five-outputs graphs and their README
 RUNS = os.path.join(ROOT, "runs", "anytime_interrupt")
 
 SURFACE, INK, INK2, MUTED, GRID, AXIS = "#fcfcfb", "#0b0b0b", "#52514e", "#898781", "#e1e0d9", "#c3c2b7"
@@ -38,6 +39,9 @@ RADIUS_IN = 0.04   # rounded data end
 plt.rcParams["font.family"] = ["Segoe UI", "DejaVu Sans"]
 with open(os.path.join(OUT, "measured_results.json")) as f:
     MEASURED = json.load(f)
+with open(os.path.join(RUNS, "model_sizes.json")) as f:   # written by scripts/measure_model_sizes.py
+    SIZES = json.load(f)
+FILE_MB = {f: SIZES["onnx_files"][f]["whole_model_mb"] for f in ("fp32", "fp16", "int8")}
 
 
 # --------------------------------------------------------------------------- helpers
@@ -112,10 +116,10 @@ def line_key(color, text):
                   markeredgewidth=1.5, label=text)
 
 
-def save(fig, name):
-    os.makedirs(OUT, exist_ok=True)
+def save(fig, name, folder=OUT):
+    os.makedirs(folder, exist_ok=True)
     for ext in ("png", "svg"):
-        fig.savefig(os.path.join(OUT, f"{name}.{ext}"), dpi=200, facecolor=SURFACE)
+        fig.savefig(os.path.join(folder, f"{name}.{ext}"), dpi=200, facecolor=SURFACE)
     plt.close(fig)
     print("saved", name)
 
@@ -301,10 +305,9 @@ def chart_quantization():
                 label(ax, i, vals[i], f"{vals[i]:.0f}", dx_in=off[j], size=9)
     a1.set_ylabel("Time until the head's output (ms)", fontsize=10.5, color=INK2, labelpad=8)
     legend(fig, [Patch(fc=BLUE, label="FP32"), Patch(fc=ORANGE, label="FP16"), Patch(fc=AQUA, label="INT8")], x=0.068, y=0.835)
-    s = q["size_mb"]
     titles(fig, "FP16 is slower on this GPU; INT8 is faster on the CPU",
-           "train6 · median time, laptop on mains power · "
-           f"model size: FP32 {s['fp32']:.1f} MB, FP16 {s['fp16']:.1f} MB, INT8 {s['onnx_int8']:.1f} MB", x=0.075)
+           "train6 · median time, laptop on mains power · ONNX file size: "
+           f"FP32 {FILE_MB['fp32']:.1f} MB, FP16 {FILE_MB['fp16']:.1f} MB, INT8 {FILE_MB['int8']:.1f} MB", x=0.075)
     save(fig, "quantization_latency")
 
 
@@ -363,7 +366,141 @@ def chart_speedup():
     save(fig, "postprocess_speedup")
 
 
+# --------------------------------------------------------------------------- 10-14. three inputs, five outputs
+# Inputs: the head that answers (x-axis), the number format (colour), the hardware (panel).
+# Outputs: mAP50, mAP50-95, time to the answer, weight storage, multiply-adds.
+FORMATS = {"FP32": BLUE, "FP16": ORANGE, "INT8": AQUA}
+DEVICES = {"GPU (GTX 1650)": {"FP32": "gpu_fp32", "FP16": "gpu_fp16"},
+           "CPU": {"FP32": "cpu_fp32", "INT8": "cpu_int8"}}
+STAGE_ORDER = ["backbone", "head1", "fpn", "head2", "pan", "head3", "refine", "head_final"]
+HEAD_STAGES = ["head1", "head2", "head3", "head_final"]
+
+
+DASH = {"FP16": (0, (3.5, 2.5))}   # FP16 is dashed so FP32 shows through where the two are equal
+
+
+def _lines(ax, series, fmt="{:.3f}", same=0.0):
+    """series: {format: [4 values]} over the four heads. Each point is labelled: the lowest line below
+    its point, the others above. Values within `same` of a higher one share that label."""
+    for name, ys in series.items():
+        color = FORMATS[name]
+        ax.plot(range(4), ys, color=color, lw=2, linestyle=DASH.get(name, "-"), dash_capstyle="round",
+                solid_capstyle="round", solid_joinstyle="round", zorder=3)
+        ax.scatter(range(4), ys, s=55, color=color, edgecolor=SURFACE, linewidth=2, zorder=4)
+    for i in range(4):
+        # group values that lie within `same` of each other; a group shares one label listing
+        # each distinct value in legend order (FP32 / FP16 / INT8)
+        order = [n for n in FORMATS if n in series]
+        groups = []
+        for n in sorted(order, key=lambda n: series[n][i], reverse=True):
+            if groups and series[groups[-1][-1]][i] - series[n][i] <= same:
+                groups[-1].append(n)
+            else:
+                groups.append([n])
+        for k, g in enumerate(groups):
+            texts = []
+            for n in sorted(g, key=order.index):
+                t = fmt.format(series[n][i])
+                if t not in texts:
+                    texts.append(t)
+            top = max(series[n][i] for n in g)
+            below = len(groups) > 1 and k == len(groups) - 1
+            label(ax, i, top if not below else min(series[n][i] for n in g), " / ".join(texts),
+                  dy_pt=-8 if below else 8, va="top" if below else "bottom", size=9)
+
+
+def _head_axis(ax):
+    ax.set_xlim(-0.35, 3.35)
+    ax.set_xticks(range(4))
+    ax.set_xticklabels(HEADS)
+    ax.set_xlabel("Head that answers", fontsize=10.5, color=INK2, labelpad=8)
+
+
+def _format_key(f):
+    return Line2D([0], [0], color=FORMATS[f], lw=2, linestyle=DASH.get(f, "-"), marker="o", markersize=6.5,
+                  markeredgecolor=SURFACE, markeredgewidth=1.5, label=f)
+
+
+def _device_panels(name, title, subtitle, get, ylabel, ylim, yticks, fmt, same=0.0):
+    fig, axes = new_fig(w=10.5, h=5.7, ncols=2, left=0.075, right=0.975, top=0.67, bottom=0.13)
+    for ax, (device, formats) in zip(axes, DEVICES.items()):
+        style(ax)
+        _head_axis(ax)
+        ax.set_ylim(*ylim)
+        ax.set_yticks(yticks)
+        ax.set_title(device, fontsize=10.5, color=INK2, loc="left", pad=10)
+        _lines(ax, {f: get(key) for f, key in formats.items()}, fmt, same)
+    axes[0].set_ylabel(ylabel, fontsize=10.5, color=INK2, labelpad=8)
+    legend(fig, [_format_key(f) for f in FORMATS], x=0.068, y=0.815)
+    titles(fig, title, subtitle, x=0.075)
+    save(fig, name, STUDY)
+
+
+def chart_parameter_study():
+    with open(os.path.join(RUNS, "quantization", "results.json")) as f:
+        q = json.load(f)
+    with open(os.path.join(RUNS, "quantization", "cpu_latency_repeat.json")) as f:
+        cpu = json.load(f)
+    base = ("train6 · 150 unseen test images · FP16 was run only on the GPU, INT8 only on the CPU\n"
+            "On the GPU, FP16 is within 0.001 of FP32 at every head, so the lines overlap; labels read FP32 / FP16 where they differ")
+
+    # 1-2: accuracy
+    for metric, name, label_text, ylim, yticks in (
+            ("mAP50", "params_map50", "mAP50", (0, 0.42), [0, 0.1, 0.2, 0.3, 0.4]),
+            ("mAP50_95", "params_map50_95", "mAP50-95", (0, 0.23), [0, 0.05, 0.10, 0.15, 0.20])):
+        a = lambda key: [q["accuracy"][key][k][metric] for k in HEAD_KEYS]
+        first, last, drop = a("cpu_fp32")[0], a("cpu_fp32")[3], a("cpu_fp32")[3] - a("cpu_int8")[3]
+        _device_panels(name, f"Output: {label_text} {first:.3f} at Head 1, {last:.3f} at Final (FP32); "
+                             f"INT8 is {drop:.3f} lower at Final",
+                       base, a,
+                       label_text, ylim, yticks, "{:.3f}", same=0.0015)
+
+    # 3: time until the answer
+    lat = {"gpu_fp32": [q["latency"]["gpu_fp32"][k]["median_ms"] for k in HEAD_KEYS],
+           "gpu_fp16": [q["latency"]["gpu_fp16"][k]["median_ms"] for k in HEAD_KEYS],
+           "cpu_fp32": cpu["fp32"], "cpu_int8": cpu["int8"]}
+    _device_panels("params_latency", "Output: time until the answer grows with each head",
+                   "train6 · median time, laptop on mains power · GPU: resize + network + post-processing · "
+                   "CPU: network only, so compare formats within a panel",
+                   lambda key: lat[key], "Time until the answer (ms)", (0, 130), [0, 25, 50, 75, 100, 125], "{:.1f}")
+
+    # 4: file size of the ONNX graph cut to heads 1..k, measured on disk
+    sizes = {f.upper(): SIZES["onnx_files"][f]["upto_head_mb"] for f in ("fp32", "fp16", "int8")}
+    fig, ax = new_fig(right=0.95, top=0.74)
+    style(ax)
+    _head_axis(ax)
+    ax.set_ylim(0, 24)
+    ax.set_yticks([0, 5, 10, 15, 20])
+    ax.set_ylabel("Model file size (MB)", fontsize=10.5, color=INK2, labelpad=8)
+    _lines(ax, sizes, "{:.2f}")
+    legend(fig, [_format_key(f) for f in FORMATS], y=0.81)
+    titles(fig, f"Output: model file size, {sizes['FP32'][3]:.2f} / {sizes['FP16'][3]:.2f} / "
+                f"{sizes['INT8'][3]:.2f} MB at the Final head",
+           "Measured size of the ONNX file holding every layer that has run by that head · the same on GPU and CPU\n"
+           "Each file is the full model cut after that head, so earlier heads are included")
+    save(fig, "params_file_size", STUDY)
+
+    # 5: multiply-adds counted on the real model with hooks on every convolution
+    m_cum = [m / 1e9 for m in SIZES["macs_upto_head"]]
+    steps = ", ".join(f"{b - a:.2f}" for a, b in zip(m_cum, m_cum[1:]))
+    fig, ax = new_fig(right=0.95)
+    style(ax)
+    _head_axis(ax)
+    ax.set_ylim(0, 10)
+    ax.set_yticks([0, 2, 4, 6, 8, 10])
+    ax.set_ylabel("Multiply-adds (billions)", fontsize=10.5, color=INK2, labelpad=8)
+    ax.plot(range(4), m_cum, color=INK2, lw=2, zorder=3)
+    ax.scatter(range(4), m_cum, s=55, color=INK2, edgecolor=SURFACE, linewidth=2, zorder=4)
+    for i, v in enumerate(m_cum):
+        label(ax, i, v, f"{v:.3f}", dy_pt=8, size=9.5)
+    titles(fig, f"Output: multiply-adds rise from {m_cum[0]:.2f} to {m_cum[3]:.2f} billion",
+           f"Counted on the model for one 640 × 640 image, every layer that has run by that head · "
+           f"added per head: {steps} billion\nThe same for every number format and on GPU and CPU")
+    save(fig, "params_compute", STUDY)
+
+
 if __name__ == "__main__":
+    chart_parameter_study()
     chart_accuracy_by_run()
     chart_learning_small()
     chart_learning_train6()

@@ -227,13 +227,14 @@ its frames trigger the idle-gap effect on some of them.
 
 ### FP16 and INT8 (train6, no retraining, 150 unseen images)
 
-| Version | Final-head mAP50 | Model size | Final head ready at |
+| Version | Final-head mAP50 | ONNX file size | Final head ready at |
 |---|---|---|---|
-| FP32 | 0.365 | 21.8 MB | 49.6 ms on the GPU, 113.4 ms on the CPU |
-| FP16 | 0.365 | 10.9 MB | 71.6 ms on the GPU |
+| FP32 | 0.365 | 21.9 MB | 49.6 ms on the GPU, 113.4 ms on the CPU |
+| FP16 | 0.365 | 11.0 MB | 71.6 ms on the GPU |
 | INT8 | 0.347 | 6.2 MB | 67.3 ms on the CPU |
 
-GPU times are the whole pipeline; CPU times are the network only.
+GPU times are the whole pipeline; CPU times are the network only. File sizes are
+measured on disk (`scripts/measure_model_sizes.py`).
 
 ![mAP50 of each head in FP32, FP16 and INT8](docs/results/quantization_accuracy.png)
 
@@ -268,7 +269,12 @@ traffic light, traffic sign, train.
 | `docs/model_architecture.png` (.svg, .pdf) | Full network diagram |
 | `docs/head_architecture.png` (.svg, .pdf) | One detection head, with timelines |
 | `docs/time_vs_accuracy.png` (.svg, .pdf) | Time vs accuracy chart |
-| `docs/results/` | Nine result charts (.png, .svg); redraw them with `docs/make_result_charts.py` |
+| `docs/results/` | Result charts (.png, .svg); redraw them with `docs/make_result_charts.py` |
+| `docs/weight_distribution/` | Weight value statistics and 64-bin histograms for all 151 convolution layers (CSV), as trained and with BatchNorm folded |
+| `docs/parameter_study/` | Three inputs (head, number format, hardware) against five outputs: five graphs and a README explaining each |
+| `docs/anytime_v8_fast/` | The same results for the fast anytime model on YOLOv8n: charts, parameter study with Excel sheet, layer-wise weight distribution, and a README explaining each |
+| `docs/anytime_v8/` | The same results for the first anytime model on YOLOv8n (every head on every frame) |
+| `docs/model_comparison/` | train6, anytime_v8, anytime_v8_fast, YOLOv8n and YOLOv8m measured in one run: charts, Excel sheet and README |
 | `docs/accelerator_workload.csv` and `_summary.md` | Per-layer workload for accelerator design |
 | `cluster/` | SLURM job script and notes for the cluster run |
 | `backup_original/` | Files as they were before each fix |

@@ -696,7 +696,17 @@ retraining (script: `scripts/quantize_compare.py`):
 - Most of the loss is quantisation itself: a simulation that rounds to
   8 bits but does the arithmetic in floats gives 0.352.
 
-**Size:** FP32 21.8 MB, FP16 10.9 MB, INT8 6.2 MB.
+**Size, measured on disk** (`scripts/measure_model_sizes.py`):
+
+| File | FP32 | FP16 | INT8 |
+|---|---|---|---|
+| ONNX model | 21.86 MB | 10.99 MB | 6.18 MB |
+| PyTorch weights only (state_dict) | 22.08 MB | 11.12 MB | - |
+
+The training checkpoint `last.pt` is 43.98 MB, because it also stores
+the optimizer state. An earlier version of this section gave 21.8 and
+10.9 MB for FP32 and FP16; those were parameter count × 4 and × 2 bytes,
+calculated, not measured.
 
 **Time until each head's output** (median, laptop on mains power):
 
@@ -766,6 +776,184 @@ The `bdd70k` dataset exists only on the cluster. To rebuild it elsewhere,
 run `build_bdd_subset.py` on the full download with
 `--n-train 65000 --n-val 1500 --n-test 1500 --seed 2` and exclude
 `archive (2)` and `bdd1500`.
+
+### 8.9 Three inputs, five outputs
+
+The same measurements drawn as one study: three things that are chosen
+(inputs) and five things that are measured (outputs).
+The graphs and a page explaining each one are in
+[docs/parameter_study/](docs/parameter_study/README.md).
+
+| Inputs | Values |
+|---|---|
+| The head that answers (the interrupt point) | Head 1, Head 2, Head 3, Final |
+| Number format | FP32, FP16, INT8 |
+| Hardware | GPU (GTX 1650), CPU |
+
+| Outputs | Where the values come from |
+|---|---|
+| mAP50, mAP50-95 | `runs/anytime_interrupt/quantization/results.json` |
+| Time until the answer | GPU: same file; CPU: `cpu_latency_repeat.json` (median of 3 repeats) |
+| Model file size | `runs/anytime_interrupt/model_sizes.json`: size on disk of the ONNX file cut after each head |
+| Multiply-adds | `runs/anytime_interrupt/model_sizes.json`: counted on the model with hooks on all 151 convolutions |
+
+Each output has its own chart: the head is the x-axis, the number format
+is the colour, and the hardware is the left or right panel. FP16 was run
+only on the GPU and INT8 only on the CPU, so each panel has two lines.
+File size and multiply-adds do not depend on the hardware, so they have
+one panel; multiply-adds also do not depend on the number format.
+
+![Output 1: mAP50](docs/parameter_study/params_map50.png)
+
+![Output 2: mAP50-95](docs/parameter_study/params_map50_95.png)
+
+![Output 3: time until the answer](docs/parameter_study/params_latency.png)
+
+![Output 4: model file size](docs/parameter_study/params_file_size.png)
+
+![Output 5: multiply-adds](docs/parameter_study/params_compute.png)
+
+File size and multiply-adds include every layer that has run by the time
+that head answers, earlier heads included, because in an anytime pass the
+earlier heads always run first.
+
+| Head | FP32 file | FP16 file | INT8 file | Multiply-adds |
+|---|---|---|---|---|
+| Head 1 | 6.19 MB | 3.12 MB | 1.80 MB | 2.702 billion |
+| Head 2 | 11.05 MB | 5.56 MB | 3.19 MB | 4.785 billion |
+| Head 3 | 17.00 MB | 8.55 MB | 4.88 MB | 6.943 billion |
+| Final | 21.89 MB | 11.02 MB | 6.28 MB | 8.888 billion |
+
+The multiply-add count matches `docs/accelerator_workload.csv` exactly.
+The "Final" files (21.89 / 11.02 / 6.28 MB) are a few kB larger than the
+whole-model files above, because cutting a graph rewrites its
+description.
+
+### 8.10 Anytime heads on pretrained YOLOv8n (measured 2026-10-26)
+
+A fine-tuned YOLOv8n (COCO-pretrained, 1,200 bdd1500 images, 50 epochs)
+was faster than this project's model, and almost as accurate with 54×
+less data. So a second anytime model was built on it
+(`models/anytime_v8.py`):
+
+| Part | Where it comes from |
+|---|---|
+| Backbone, neck, Final head | YOLOv8n, unchanged, COCO-pretrained weights (all 355 tensors loaded) |
+| Head 1 | New light head on the backbone outputs (layers 4, 6, 9) |
+| Head 2 | New light head after the top-down FPN (layers 15, 12, 9) |
+
+Each new head has one 3 × 3 convolution per branch at 32 channels
+(0.43 billion multiply-adds each). Training used Ultralytics' trainer and
+YOLOv8's loss summed over the heads, weights 0.3 / 0.6 / 1.0, with the
+same settings as the YOLOv8n baseline (`scripts/train_anytime_v8.py`).
+
+Measured by `scripts/evaluate_anytime_v8.py` on the 150 bdd1500 test
+images, GTX 1650, mains power; both models fused (BatchNorm folded) and
+run through the same pipeline (640 × 384 letterbox, GPU network, GPU NMS);
+results in `runs/anytime_v8/evaluation.json`.
+
+| | Answer ready at (median) | mAP50 | mAP50-95 |
+|---|---|---|---|
+| Anytime-v8 Head 1 | **8.92 ms** | 0.1700 | 0.0821 |
+| Anytime-v8 Head 2 | 14.04 ms | 0.2452 | 0.1303 |
+| Anytime-v8 Final | 20.04 ms | 0.2776 | 0.1478 |
+| YOLOv8n | 12.35 ms | 0.2925 | 0.1619 |
+
+| | Anytime-v8 | YOLOv8n |
+|---|---|---|
+| Frames per second | 49.0 | 73.9 |
+| Multiply-adds by each answer (640 × 640) | 2.01 / 2.92 / 5.19 billion | 4.32 billion |
+| Parameters | 3.67 M | 3.14 M |
+
+- Head 1 answers 3.4 ms before YOLOv8n, at 58% of its mAP50. Between
+  8.9 and 12.4 ms it is the only model with any answer.
+- From 12.4 ms on, YOLOv8n is better: Head 2 (14.0 ms) and the Final
+  head (20.0 ms) are both later and less accurate.
+- The Final head is 0.015 mAP50 below YOLOv8n on these test images, but
+  0.023 above it on Ultralytics' own check of the 150 calibration images
+  (0.317 against 0.294). With 150 images the two cannot be told apart.
+- Compared with the from-scratch anytime model on the same 1,200 images
+  (train5, 0.111 mAP50), the Final head is 2.5× more accurate.
+- Two timing traps were found: Ultralytics' NMS takes 15 to 20 ms per
+  head unless `torchvision` is imported first (then 1.3 ms), and an
+  unfused model is about 25% slower.
+
+### 8.11 Lower latency: frozen YOLOv8n, depthwise heads, lazy heads (measured 2026-10-27)
+
+Three changes, trained with `train_anytime_v8 --freeze-base --depthwise
+--name bdd1500_fast` (18 minutes) and measured with
+`evaluate_anytime_v8` (results in `runs/anytime_v8/evaluation_fast.json`;
+same 150 test images, GTX 1650, mains power):
+
+- **Frozen YOLOv8n:** the fine-tuned YOLOv8n (layers 0 to 22, BatchNorm
+  statistics too) is frozen; only the early heads learn. The Final head
+  is therefore exactly YOLOv8n.
+- **Depthwise early heads:** each 3×3 conv becomes a depthwise 3×3 plus
+  a 1×1 conv. One early head costs 79 million multiply-adds instead of
+  433 million (counted).
+- **Lazy early heads:** an early head is computed only when an interrupt
+  asks for it. Its inputs are kept in memory anyway for later layers, so
+  a frame with no interrupt runs exactly the YOLOv8n pass.
+
+"Answer at" is image in to boxes on the CPU, when the interrupt asks for
+that head (median).
+
+| | Answer at | mAP50 | mAP50-95 |
+|---|---|---|---|
+| Head 1 | 9.77 ms | 0.0975 | 0.0405 |
+| Head 2 | 11.17 ms | 0.1847 | 0.0795 |
+| Final | 13.01 ms | 0.2925 | 0.1619 |
+| YOLOv8n | 12.38 ms | 0.2925 | 0.1619 |
+
+| | Before (§8.10) | Now |
+|---|---|---|
+| Final answer | 20.04 ms | 13.01 ms |
+| Frames per second | 49.0 | 74.2 (YOLOv8n in the same run: 68.4) |
+| Time from interrupt to boxes | (heads always computed) | 4.40 ms |
+| Multiply-adds to Head 1 / Head 2 / Final (640 × 640) | 2.01 / 2.92 / 5.19 G | 1.66 / 2.13 / 4.32 G (from the counts above) |
+
+- The Final head now equals YOLOv8n in accuracy (identical numbers) and
+  is within 0.6 ms of it in time.
+- Head 2 now answers 1.2 ms before YOLOv8n, at 63% of its mAP50.
+- The early heads lost accuracy (Head 1 0.170 to 0.097, Head 2 0.245 to
+  0.185). The frozen backbone and the smaller heads both contribute; this
+  run cannot separate them.
+- On the GPU the depthwise heads were not faster (network to Head 1:
+  6.05 ms against 5.82 ms before), because at batch size 1 the GTX 1650
+  is limited by kernel launches, not by multiply-adds. The fewer
+  multiply-adds matter for the hardware accelerator.
+
+All results of this model (charts, number formats FP32 / FP16 / INT8,
+per-class accuracy, parameter study with an Excel sheet, and the weight
+distribution of every layer) are in `docs/anytime_v8_fast/`, explained in
+its README. The same set of results for the first anytime_v8 model (every
+head on every frame) is in `docs/anytime_v8/`.
+
+### 8.12 All five models compared
+
+`scripts/compare_all_models.py` measured train6, anytime_v8,
+anytime_v8_fast, YOLOv8n and YOLOv8m in one run, on the same GTX 1650
+and the same 150 test images (`runs/model_comparison/results.json`).
+train6 was trained on 65,000 images; the other four on the same 1,200.
+
+| Model | Final mAP50 | Earliest answer (mAP50 at ms) | Final answer at | FPS | Parameters | Multiply-adds per frame |
+|---|---|---|---|---|---|---|
+| train6 | 0.365 | 0.250 at 16.74 ms | 38.26 ms | 26.3 | 5.45 M | 8.888 G |
+| anytime_v8 | 0.278 | 0.170 at 8.79 ms | 19.61 ms | 51.0 | 3.67 M | 5.192 G |
+| anytime_v8_fast | 0.292 | 0.098 at 9.25 ms | 12.19 ms | 81.7 | 3.23 M | 4.325 G |
+| YOLOv8n | 0.292 | | 12.18 ms | 81.8 | 3.13 M | 4.325 G |
+| YOLOv8m | 0.420 | | 26.89 ms | 35.2 | 25.85 M | 39.355 G |
+
+- **YOLOv8m is the most accurate model** (0.420 mAP50, the best for 8 of
+  9 classes), but it has 8.2× the parameters and 9.1× the multiply-adds
+  of YOLOv8n.
+- **anytime_v8_fast costs nothing when there is no interrupt:** the same
+  accuracy, time and FPS as YOLOv8n.
+- **INT8 loss** (CPU, no retraining): train6 4.5–6.1%, anytime_v8
+  4.6–9.6%, anytime_v8_fast 7.6–14.2%.
+
+Charts, an Excel sheet with every value, and a README are in
+`docs/model_comparison/`.
 
 ---
 

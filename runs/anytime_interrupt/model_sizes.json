@@ -1,0 +1,45 @@
+{
+  "checkpoint": "runs/anytime_interrupt/train6_bdd70k/last.pt",
+  "onnx_files": {
+    "fp32": {
+      "whole_model_mb": 21.862167,
+      "upto_head_mb": [
+        6.191215,
+        11.049557,
+        16.997696,
+        21.894697
+      ]
+    },
+    "fp16": {
+      "whole_model_mb": 10.985085,
+      "upto_head_mb": [
+        3.117627,
+        5.562353,
+        8.55333,
+        11.017615
+      ]
+    },
+    "int8": {
+      "whole_model_mb": 6.179795,
+      "upto_head_mb": [
+        1.80171,
+        3.191577,
+        4.876271,
+        6.280427
+      ]
+    }
+  },
+  "pytorch_files": {
+    "state_dict_fp32_mb": 22.07738,
+    "state_dict_fp16_mb": 11.124292,
+    "training_checkpoint_mb": 43.975378
+  },
+  "parameters": 5447012,
+  "conv_layers": 151,
+  "macs_upto_head": [
+    2701926400,
+    4784537600,
+    6942515200,
+    8887910400
+  ]
+}

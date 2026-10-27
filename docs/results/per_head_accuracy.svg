@@ -6,7 +6,7 @@
   <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
    <cc:Work>
     <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
-    <dc:date>2026-10-06T11:00:12.995438</dc:date>
+    <dc:date>2026-10-26T20:28:16.483180</dc:date>
     <dc:format>image/svg+xml</dc:format>
     <dc:creator>
      <cc:Agent>
@@ -342,7 +342,7 @@ z
      <g id="line2d_5">
       <path d="M 55.08 338.256 
 L 628.56 338.256 
-" clip-path="url(#p00ea033f7d)" style="fill: none; stroke: #e1e0d9; stroke-linecap: square"/>
+" clip-path="url(#pf726168ea2)" style="fill: none; stroke: #e1e0d9; stroke-linecap: square"/>
      </g>
      <g id="line2d_6"/>
      <g id="text_5">
@@ -393,7 +393,7 @@ z
      <g id="line2d_7">
       <path d="M 55.08 268.056 
 L 628.56 268.056 
-" clip-path="url(#p00ea033f7d)" style="fill: none; stroke: #e1e0d9; stroke-linecap: square"/>
+" clip-path="url(#pf726168ea2)" style="fill: none; stroke: #e1e0d9; stroke-linecap: square"/>
      </g>
      <g id="line2d_8"/>
      <g id="text_6">
@@ -409,7 +409,7 @@ L 628.56 268.056
      <g id="line2d_9">
       <path d="M 55.08 197.856 
 L 628.56 197.856 
-" clip-path="url(#p00ea033f7d)" style="fill: none; stroke: #e1e0d9; stroke-linecap: square"/>
+" clip-path="url(#pf726168ea2)" style="fill: none; stroke: #e1e0d9; stroke-linecap: square"/>
      </g>
      <g id="line2d_10"/>
      <g id="text_7">
@@ -425,7 +425,7 @@ L 628.56 197.856
      <g id="line2d_11">
       <path d="M 55.08 127.656 
 L 628.56 127.656 
-" clip-path="url(#p00ea033f7d)" style="fill: none; stroke: #e1e0d9; stroke-linecap: square"/>
+" clip-path="url(#pf726168ea2)" style="fill: none; stroke: #e1e0d9; stroke-linecap: square"/>
      </g>
      <g id="line2d_12"/>
      <g id="text_8">
@@ -1914,7 +1914,7 @@ z
   </g>
  </g>
  <defs>
-  <clipPath id="p00ea033f7d">
+  <clipPath id="pf726168ea2">
    <rect x="55.08" y="85.536" width="573.48" height="252.72"/>
   </clipPath>
  </defs>

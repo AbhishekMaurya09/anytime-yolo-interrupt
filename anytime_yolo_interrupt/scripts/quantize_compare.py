@@ -86,7 +86,8 @@ def evaluate(raw_fn, dataset, class_names):
     report = {}
     for h, name in enumerate(HEADS):
         r = evaluate_predictions(preds[h], gts[h], class_names, n_images_expected=len(dataset))
-        report[name] = {"mAP50": r.map50, "mAP50_95": r.map50_95, "precision": r.precision, "recall": r.recall}
+        report[name] = {"mAP50": r.map50, "mAP50_95": r.map50_95, "precision": r.precision, "recall": r.recall,
+                        "per_class_ap50": {c: (None if np.isnan(v) else float(v)) for c, v in r.per_class_ap50.items()}}
     return report
 
 
